@@ -20,6 +20,7 @@ namespace Back_End_Project.Controllers
             {
                 Sliders = await _context.Sliders.Where(s => s.IsDeleted == false).ToListAsync(),
                 Products = await _context.Products.Where(p =>  p.IsDeleted == false).ToListAsync(),
+                Blogs = await _context.Blogs.Where(b => b.IsDeleted == false).ToListAsync(),
             };
 
             return View(homeVM);

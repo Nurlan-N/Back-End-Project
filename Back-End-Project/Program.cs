@@ -1,4 +1,6 @@
 using Back_End_Project.DataAccessLayer;
+using Back_End_Project.Interfaces;
+using Back_End_Project.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
+builder.Services.AddScoped<ILayoutService, LayoutService >();
+
 var app = builder.Build();
 
 app.UseStaticFiles();

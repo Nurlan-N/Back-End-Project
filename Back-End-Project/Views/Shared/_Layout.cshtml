@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@inject  ILayoutService layoutservices
+@{
+    IDictionary<string, string> settings = await layoutservices.GetSettings();
+
+}
+
+
+<!DOCTYPE html>
 <html class="no-js" lang="zxx">
 
 <!-- Mirrored from demo.hasthemes.com/juan-preview-v1/juan/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 Mar 2021 22:36:22 GMT -->
@@ -276,7 +283,7 @@
                 <!-- search box start -->
                 <div class="search-box-offcanvas">
                     <form>
-                        <input type="text" placeholder="Search Here...">
+                        <input id="SearchInput" type="text" placeholder="Search Here...">
                         <button class="search-btn"><i class="ion-ios-search-strong"></i></button>
                     </form>
                 </div>
@@ -466,8 +473,6 @@
         </div>
     </aside>
     <!-- off-canvas menu end -->
-    <!-- main wrapper start -->
-    <main>
         @RenderBody()
     <!-- Start Footer Area Wrapper -->
     <footer class="footer-wrapper">
@@ -481,8 +486,8 @@
                             <h5 class="widget-title">My Account</h5>
                             <div class="widget-body">
                                 <ul class="location-wrap">
-                                    <li><i class="ion-ios-location-outline"></i>184 Main Rd E, St Albans VIC 3021, Australia</li>
-                                    <li><i class="ion-ios-email-outline"></i>Mail Us: <a href="mailto:yourmail@gmail.com">yourmail@gmail.com</a></li>
+                                        <li><i class="ion-ios-location-outline"></i>@Html.Raw(settings.FirstOrDefault(s => s.Key == "Address").Value)</li>
+                                        <li><i class="ion-ios-email-outline"></i>Mail Us: <a href="mailto:yourmail@gmail.com">@Html.Raw(settings.FirstOrDefault(s => s.Key == "Email").Value)</a></li>
                                     <li><i class="ion-ios-telephone-outline"></i>Phone: <a href="%2b0025425456554">+ 00 254 254565</a></li>
                                 </ul>
                             </div>
@@ -668,6 +673,12 @@
     </div>
     <!-- Scroll to Top End -->
     <!--=======================Javascript============================-->
+    <!--jQuery-->
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+            integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+            crossorigin="anonymous"></script>
+    <!--CustomJS-->
+    <script src="~/assets/js/custom.js"></script>
     <!--=== All Vendor Js ===-->
     <script src="~/assets/js/vendor.js"></script>
     <!--=== All Plugins Js ===-->
