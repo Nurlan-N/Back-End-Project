@@ -1,4 +1,4 @@
-﻿
+﻿@model HomeVM
 @{
     ViewData["Title"] = "Index";
 }
@@ -10,28 +10,19 @@
             <div class="col-12">
                 <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
                     <!-- single slider item start -->
-                    <div class="hero-single-slide">
-                        <div class="hero-slider-item bg-img" data-bg="assets/img/slider/slider-1.jpg">
-                            <div class="hero-slider-content slide-1">
-                                <h5 class="slide-subtitle">Top Selling!</h5>
-                                <h2 class="slide-title">New Collection</h2>
-                                <p class="slide-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid</p>
-                                <a href="shop.html" class="btn btn-hero">SHOP NOW</a>
+                    @foreach (Slider slider in Model.Sliders)
+                    {
+                        <div class="hero-single-slide">
+                            <div class="hero-slider-item bg-img" data-bg="@slider.Image">
+                                <div class="hero-slider-content slide-1">
+                                    <h5 class="slide-subtitle">@slider.SubTitle</h5>
+                                    <h2 class="slide-title">@slider.Title</h2>
+                                    <p class="slide-desc">@slider.Description</p>
+                                    <a href="shop.html" class="btn btn-hero">SHOP NOW</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- single slider item end -->
-                    <!-- single slider item start -->
-                    <div class="hero-single-slide">
-                        <div class="hero-slider-item bg-img" data-bg="assets/img/slider/slider-2.jpg">
-                            <div class="hero-slider-content slide-1">
-                                <h5 class="slide-subtitle">Best Selling!</h5>
-                                <h2 class="slide-title">Top Collection</h2>
-                                <p class="slide-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid</p>
-                                <a href="shop.html" class="btn btn-hero">SHOP NOW</a>
-                            </div>
-                        </div>
-                    </div>
+                    }
                     <!-- single slider item end -->
                 </div>
             </div>
@@ -101,135 +92,35 @@
             <div class="col-12">
                 <div class="product-carousel-4 mbn-50 slick-row-15 slick-arrow-style">
                     <!-- product single item start -->
-                    <div class="product-item mb-50">
-                        <div class="product-thumb">
-                            <a href="product-details.html">
-                                <img src="~/assets/img/product/product-1.jpg" alt="">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <h5 class="product-name">
-                                <a href="product-details.html">Leather Mens Slipper</a>
-                            </h5>
-                            <div class="price-box">
-                                <span class="price-regular">$80.00</span>
-                                <span class="price-old"><del>$70.00</del></span>
-                            </div>
-                            <div class="product-action-link">
-                                <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
-                                <a href="#" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
-                                <a href="#" data-toggle="modal" data-target="#quick_view">
-                                    <span data-toggle="tooltip"
-                                          title="Quick View"><i class="ion-ios-eye-outline"></i></span>
+                    @foreach (Product product in Model.Products)
+                    {
+                        <div class="product-item mb-50">
+                            <div class="product-thumb">
+                                <a href="product-details.html">
+                                    <img src="@product.Image" alt="">
                                 </a>
                             </div>
-                        </div>
-                    </div>
-                    <!-- product single item start -->
-                    <!-- product single item start -->
-                    <div class="product-item mb-50">
-                        <div class="product-thumb">
-                            <a href="product-details.html">
-                                <img src="~/assets/img/product/product-2.jpg" alt="">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <h5 class="product-name">
-                                <a href="product-details.html">Quickiin Mens shoes</a>
-                            </h5>
-                            <div class="price-box">
-                                <span class="price-regular">$80.00</span>
-                                <span class="price-old"><del>$70.00</del></span>
-                            </div>
-                            <div class="product-action-link">
-                                <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
-                                <a href="#" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
-                                <a href="#" data-toggle="modal" data-target="#quick_view">
-                                    <span data-toggle="tooltip"
-                                          title="Quick View"><i class="ion-ios-eye-outline"></i></span>
-                                </a>
+                            <div class="product-content">
+                                <h5 class="product-name">
+                                    <a href="product-details.html">@product.Title</a>
+                                </h5>
+                                <div class="price-box">
+                                    <span class="price-regular">$@product.DiscountedPrice</span>
+                                    <span class="price-old"><del>$@product.Price</del></span>
+                                </div>
+                                <div class="product-action-link">
+                                    <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
+                                    <a href="#" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
+                                    <a href="#" data-toggle="modal" data-target="#quick_view">
+                                        <span data-toggle="tooltip"
+                                              title="Quick View"><i class="ion-ios-eye-outline"></i></span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- product single item start -->
-                    <!-- product single item start -->
-                    <div class="product-item mb-50">
-                        <div class="product-thumb">
-                            <a href="product-details.html">
-                                <img src="~/assets/img/product/product-3.jpg" alt="">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <h5 class="product-name">
-                                <a href="product-details.html">Rexpo Womens shoes</a>
-                            </h5>
-                            <div class="price-box">
-                                <span class="price-regular">$80.00</span>
-                                <span class="price-old"><del>$70.00</del></span>
-                            </div>
-                            <div class="product-action-link">
-                                <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
-                                <a href="#" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
-                                <a href="#" data-toggle="modal" data-target="#quick_view">
-                                    <span data-toggle="tooltip"
-                                          title="Quick View"><i class="ion-ios-eye-outline"></i></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- product single item start -->
-                    <!-- product single item start -->
-                    <div class="product-item mb-50">
-                        <div class="product-thumb">
-                            <a href="product-details.html">
-                                <img src="~/assets/img/product/product-4.jpg" alt="">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <h5 class="product-name">
-                                <a href="product-details.html">Primitive Mens shoes</a>
-                            </h5>
-                            <div class="price-box">
-                                <span class="price-regular">$80.00</span>
-                                <span class="price-old"><del>$70.00</del></span>
-                            </div>
-                            <div class="product-action-link">
-                                <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
-                                <a href="#" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
-                                <a href="#" data-toggle="modal" data-target="#quick_view">
-                                    <span data-toggle="tooltip"
-                                          title="Quick View"><i class="ion-ios-eye-outline"></i></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- product single item start -->
-                    <!-- product single item start -->
-                    <div class="product-item mb-50">
-                        <div class="product-thumb">
-                            <a href="product-details.html">
-                                <img src="~/assets/img/product/product-5.jpg" alt="">
-                            </a>
-                        </div>
-                        <div class="product-content">
-                            <h5 class="product-name">
-                                <a href="product-details.html">Leather Mens Slipper</a>
-                            </h5>
-                            <div class="price-box">
-                                <span class="price-regular">$80.00</span>
-                                <span class="price-old"><del>$70.00</del></span>
-                            </div>
-                            <div class="product-action-link">
-                                <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
-                                <a href="#" data-toggle="tooltip" title="Add To Cart"><i class="ion-bag"></i></a>
-                                <a href="#" data-toggle="modal" data-target="#quick_view">
-                                    <span data-toggle="tooltip"
-                                          title="Quick View"><i class="ion-ios-eye-outline"></i></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- product single item start -->
+                    }
+                    <!-- product single item end -->
+            
                 </div>
             </div>
         </div>
