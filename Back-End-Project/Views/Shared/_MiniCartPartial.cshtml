@@ -1,0 +1,6 @@
+﻿@model IEnumerable<BasketVM>
+
+<a href="#" class="minicart-btn">
+    <i class="ion-bag"></i>
+    <div class="notification">@(Model.Count() > 0 ? Model.Count() : "0") </div>
+</a>

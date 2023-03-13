@@ -12,5 +12,6 @@ namespace Back_End_Project.DataAccessLayer
         public DbSet<Category> Categories { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Blog> Blogs { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
     }
 }

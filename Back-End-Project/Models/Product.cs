@@ -24,6 +24,7 @@ namespace Back_End_Project.Models
         public string? Image { get; set; }
         [NotMapped]
         public IEnumerable<IFormFile>? Files { get; set; }
+        public List<ProductImage>? ProductImages { get; set; }
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
         public int CategoryId { get; set; }

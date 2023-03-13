@@ -1,4 +1,35 @@
 ﻿$(document).ready(function () {
+    
+    $('.addToBasket').click(function myFunction(e) {
+        e.preventDefault();
+
+        let productId = $(this).data('id');
+        fetch('basket/AddBasket?id=' + productId)
+            .then(res => {
+                return res.text();
+            }).then(data => {
+                $('.header-cart').html(data)
+                 
+                $(".offcanvas-close, .minicart-close,.offcanvas-overlay").on('click', function () {
+                    $("body").removeClass('fix');
+                    $(".offcanvas-search-inner, .minicart-inner").removeClass('show')
+                })
+            })
+       
+    })
+    $(document).on('click', '.deleteToBasket' , function(e) {
+        e.preventDefault();
+
+        const removeId = $(this).attr('data-id');
+
+        fetch('basket/DeleteBasket?id=' + removeId)
+            .then(res => {
+                return res.text();
+            }).then(data => {
+                $('.header-cart').html(data)
+            })
+       
+    })
     $('#SearchValue').keyup(function ()
 	{
         let search = $(this).val();

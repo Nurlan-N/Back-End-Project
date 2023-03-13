@@ -31,7 +31,7 @@
 		$(".minicart-inner").addClass('show')
 	})
 
-	$(".offcanvas-close, .minicart-close,.offcanvas-overlay").on('click', function(){
+	$(".offcanvas-close, .minicart-close,.offcanvas-overlay").on('click', function () {
 		$("body").removeClass('fix');
 		$(".offcanvas-search-inner, .minicart-inner").removeClass('show')
 	})
