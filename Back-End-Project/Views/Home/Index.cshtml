@@ -17,7 +17,7 @@
                         @foreach (Slider slider in Model.Sliders)
                         {
                             <div class="hero-single-slide">
-                                <div class="hero-slider-item bg-img" data-bg="@slider.Image">
+                                <div class="hero-slider-item bg-img" data-bg="assets/img/slider/@slider.Image">
                                     <div class="hero-slider-content slide-1">
                                         <h5 class="slide-subtitle">@slider.SubTitle</h5>
                                         <h2 class="slide-title">@slider.Title</h2>
@@ -101,7 +101,7 @@
                             <div class="product-item mb-50">
                                 <div class="product-thumb">
                                     <a href="product-details.html">
-                                        <img src="@product.Image" alt="">
+                                        <img src="~/assets/img/product/@product.Image" alt="">
                                     </a>
                                 </div>
                                 <div class="product-content">
@@ -176,7 +176,7 @@
                 <div class="col-xl-4 col-lg-5 col-md-5">
                     <div class="product-banner">
                         <a href="#">
-                            <img src="@Html.Raw(settings.FirstOrDefault(s => s.Key == "TopSellerBanner").Value)" alt="product banner">
+                            <img src="~/assets/img/banner/@Html.Raw(settings.FirstOrDefault(s => s.Key == "TopSellerBanner").Value)" alt="product banner">
                         </a>
                     </div>
                 </div>
@@ -418,7 +418,7 @@
                             <div class="blog-post-item">
                                 <div class="blog-thumb">
                                     <a href="blog-details.html">
-                                        <img src="@blog.Image" alt="blog thumb">
+                                        <img src="~/assets/img/blog/@blog.Image" alt="blog thumb">
                                     </a>
                                 </div>
                                 <div class="blog-content">

@@ -3681,3 +3681,18 @@ fieldset {
     color: #e3a51e; }
 
 /*------- footer bottom end -------*/
+.searchBody {
+    box-sizing: border-box;
+    background-color: white;
+    position: absolute;
+    width: 69rem;
+    margin-top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+}
+    .searchBody a {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }

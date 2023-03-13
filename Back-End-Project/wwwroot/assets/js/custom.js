@@ -1,4 +1,22 @@
 ﻿$(document).ready(function () {
+    $('#SearchValue').keyup(function ()
+	{
+        let search = $(this).val();
+        console.log(search)
+        if (search.Trim().length >= 3) {
+            fetch('product/search?search=' + search)
+                .then(res => {
+                    return res.text()
+                }).then(data => {
+                    $('.searchBody').html(data)
+                })
+        } else {
+            $('.searchBody').html('')
+
+        }
+	})
+
+
     $(".productModal").click(function (e) {
         e.preventDefault();
 

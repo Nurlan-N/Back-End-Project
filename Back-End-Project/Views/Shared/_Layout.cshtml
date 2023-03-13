@@ -1,4 +1,4 @@
-﻿@inject  ILayoutService layoutservices
+﻿@inject ILayoutService layoutservices
 @{
     IDictionary<string, string> settings = await layoutservices.GetSettings();
 
@@ -473,7 +473,7 @@
         </div>
     </aside>
     <!-- off-canvas menu end -->
-        @RenderBody()
+    @RenderBody()
     <!-- Start Footer Area Wrapper -->
     <footer class="footer-wrapper">
         <!-- footer main area start -->
@@ -486,8 +486,8 @@
                             <h5 class="widget-title">My Account</h5>
                             <div class="widget-body">
                                 <ul class="location-wrap">
-                                        <li><i class="ion-ios-location-outline"></i>@Html.Raw(settings.FirstOrDefault(s => s.Key == "Address").Value)</li>
-                                        <li><i class="ion-ios-email-outline"></i>Mail Us: <a href="mailto:yourmail@gmail.com">@Html.Raw(settings.FirstOrDefault(s => s.Key == "Email").Value)</a></li>
+                                    <li><i class="ion-ios-location-outline"></i>@Html.Raw(settings.FirstOrDefault(s => s.Key == "Address").Value)</li>
+                                    <li><i class="ion-ios-email-outline"></i>Mail Us: <a href="mailto:yourmail@gmail.com">@Html.Raw(settings.FirstOrDefault(s => s.Key == "Email").Value)</a></li>
                                     <li><i class="ion-ios-telephone-outline"></i>Phone: <a href="%2b0025425456554">+ 00 254 254565</a></li>
                                 </ul>
                             </div>
@@ -581,9 +581,14 @@
             <div class="container">
                 <div class="offcanvas-search-box">
                     <form class="d-flex bdr-bottom w-100">
-                        <input type="text" placeholder="Search entire storage here...">
+                        <input id="SearchValue" type="text" placeholder="Search entire storage here...">
                         <button class="search-btn"><i class="ion-ios-search-strong"></i>search</button>
                     </form>
+                    <div >
+                        <ul class="searchBody">
+
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
