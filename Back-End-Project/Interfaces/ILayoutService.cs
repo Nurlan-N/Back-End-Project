@@ -7,6 +7,5 @@ namespace Back_End_Project.Interfaces
     {
         Task<IDictionary<string, string>> GetSettings();
         Task<IEnumerable<BasketVM>> GetBaskets();
-
     }
 }

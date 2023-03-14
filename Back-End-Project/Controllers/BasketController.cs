@@ -20,6 +20,7 @@ namespace Back_End_Project.Controllers
         {
             return View();
         }
+
         public async Task<IActionResult> AddBasket(int? id)
         {
             if (id == null) { return BadRequest(); }
@@ -63,7 +64,7 @@ namespace Back_End_Project.Controllers
 
             foreach (BasketVM basketVM in basketVMs)
             {
-                Product product = await _context.Products 
+                Product product = await _context.Products
                     .FirstOrDefaultAsync(p => p.Id == basketVM.Id && p.IsDeleted == false);
 
                 if (product != null)
@@ -76,8 +77,8 @@ namespace Back_End_Project.Controllers
 
             }
 
-
             return PartialView("_BasketPartial", basketVMs);
+
         }
 
         public async Task<IActionResult> DeleteBasket(int? id)
@@ -130,15 +131,13 @@ namespace Back_End_Project.Controllers
             }
         }
 
-
-
-        public async Task<IActionResult> GetBasket( )
+        public async Task<IActionResult> GetBasket()
         {
-            
+
             return Json(JsonConvert.DeserializeObject<List<BasketVM>>(HttpContext.Request.Cookies["basket"]));
         }
-      
 
-       
+
+
     }
 }
