@@ -50,6 +50,13 @@ namespace Back_End_Project.Services
             return basketVMs;
         }
 
+        public async Task<IEnumerable<Category>> GetCategories()
+        {
+            IEnumerable<Category> categories = await _appDbContext.Categories.Where(c => c.IsDeleted == false).ToListAsync();
+
+            return categories;
+        }
+
         public async Task<IDictionary<string, string>> GetSettings()
         {
             IDictionary<string, string> settings = await _appDbContext.Settings.ToDictionaryAsync(s => s.Key, s => s.Value);

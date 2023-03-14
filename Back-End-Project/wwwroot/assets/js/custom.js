@@ -27,6 +27,11 @@
                 return res.text();
             }).then(data => {
                 $('.header-cart').html(data)
+                $(".offcanvas-search-inner, .minicart-inner").addClass('show')
+                $(".offcanvas-close, .minicart-close,.offcanvas-overlay").on('click', function () {
+                    $("body").removeClass('fix');
+                   $(".offcanvas-search-inner, .minicart-inner").removeClass('show')
+                })
             })
        
     })
