@@ -1,7 +1,6 @@
 ﻿@inject ILayoutService layoutservices
 @{
     IDictionary<string, string> settings = await layoutservices.GetSettings();
-    IEnumerable<Category> categories = await layoutservices.GetCategories();
     IEnumerable<BasketVM> basketVMs = await layoutservices.GetBaskets();
 
 }
@@ -82,8 +81,8 @@
                         <!-- start logo area -->
                         <div class="col-lg-2">
                             <div class="logo">
-                                <a href="index.html">
-                                    <img src="~/assets/img/logo/logo.png" alt="">
+                                <a href="/">
+                                    <img src="~/assets/img/logo/@Html.Raw(settings.FirstOrDefault(s => s.Key == "Logo").Value)" alt="">
                                 </a>
                             </div>
                         </div>
