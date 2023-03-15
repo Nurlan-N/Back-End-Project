@@ -1,6 +1,7 @@
 ﻿@model ShopVM
 @{
     ViewData["Title"] = "Index";
+    IEnumerable<Product> products = ViewBag.Products;
 
 }
 
@@ -39,7 +40,7 @@
                             <ul class="color-list">
                                 @foreach (Category category in Model.Categories)
                                 {
-                                    <li><a asp-action="CategoryFilte" asp-controller="Shop" asp-route-id="@category.Id">@category.Name <span>@(Model?.Products?.Where(p => p.CategoryId == category.Id).Count())</span></a></li>
+                                    <li><a asp-action="Index" asp-controller="Shop" asp-route-categoryId="@category.Id">@category.Name <span>@(products.Where(p => p.CategoryId == category.Id).Count())</span></a></li>
                                 }
                             </ul>
                         </div>

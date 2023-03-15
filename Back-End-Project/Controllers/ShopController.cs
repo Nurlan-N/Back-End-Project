@@ -15,26 +15,32 @@ namespace Back_End_Project.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoryId)
         {
-            ShopVM vm = new()
+            ShopVM vm = new();
+
+            if (categoryId == null)
             {
-                Categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync(),
-                Products = await _context.Products.Where(p => p.IsDeleted == false).ToListAsync(),
-            };
-            return View(vm);
-        }
-        [HttpGet]
-        public async Task<IActionResult> CategoryFilte(int? categoryId)
-        {
+                vm = new()
+                {
+                    Categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync(),
+                    Products = await _context.Products.Where(p => p.IsDeleted == false).ToListAsync(),
+                };
+            }
+            else
+            {
+                vm = new()
+                {
+                    Categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync(),
+                    Products = await _context.Products.Where(p => p.IsDeleted == false && p.CategoryId == categoryId).ToListAsync(),
+                };
+            }
+
+            ViewBag.Products = await _context.Products.Where(c => c.IsDeleted == false).ToListAsync();
 
 
-            ShopVM vm = new()
-            {
-                Categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync(),
-                Products = await _context.Products.Where(p => p.IsDeleted == false && p.CategoryId == categoryId).ToListAsync(),
-            };
             return View(vm);
         }
+        
     }
 }
