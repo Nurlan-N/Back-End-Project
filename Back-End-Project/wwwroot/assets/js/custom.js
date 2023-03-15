@@ -1,4 +1,17 @@
 ﻿$(document).ready(function () {
+    $('.rangeFilter').click(function (e) {
+        e.preventDefault();
+
+        const val = $('.rangeInput').val();
+
+        fetch('shop/list?range=' + val)
+            .then(res => {
+                return res.text();
+            })
+            .then(data => {
+                $('.shopList').html(data)
+            })
+    })
     
     $('.addToBasket').click(function myFunction(e) {
         e.preventDefault();
