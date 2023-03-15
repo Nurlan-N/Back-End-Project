@@ -22,8 +22,9 @@ namespace Back_End_Project.Controllers
             ShopVM vm = new()
             {
                 Categories = await _context.Categories.Include(c => c.Products.Where(p => p.IsDeleted == false)).Where(c => c.IsDeleted == false).ToListAsync(),
-                Products = PageNatedList<Product>.Create(_context.Products.Where(p => (categoryId != null ? p.CategoryId == categoryId : true) && p.IsDeleted == false),pageIndex,12)
-            };           
+                Products = PageNatedList<Product>.Create(_context.Products.Where(p => (categoryId == null || p.CategoryId == categoryId) && p.IsDeleted == false),pageIndex,12)
+            }; 
+            
             return View(vm);
         }
         
@@ -32,12 +33,12 @@ namespace Back_End_Project.Controllers
             double minValue = 0;
             double maxValue = 0;
 
-            if (range != "")
+            if (range != "" && range != null)
             {
                 string[] arr = range.Split(' ');
                 for (int i = 0; i < arr.Length; i++)
                 {
-                    arr[i] = arr[i].Substring(1);
+                    arr[i] = arr[i][1..];
                 }
                 minValue = double.Parse(arr[0]);
                 maxValue = double.Parse(arr[2]);

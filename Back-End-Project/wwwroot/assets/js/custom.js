@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+
     $('.rangeFilter').click(function (e) {
         e.preventDefault();
 

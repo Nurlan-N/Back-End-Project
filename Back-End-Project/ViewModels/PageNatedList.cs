@@ -14,7 +14,7 @@
             {
                 if (start <= 0)
                 {
-                    end = end - (start - 1);
+                    end -= (start - 1);
                     start = 1;
                 }
                 if (end > TotalPage)

@@ -38,9 +38,13 @@
                             </div>
                             <div class="sidebar-body">
                                 <ul class="color-list">
-                                    @foreach (Category category in Model.Categories)
+                                    <li><a asp-action="index" asp-controller="shop">All Products <span>@Model?.Products?.Count()</span></a> </li>
+                                    @if (Model?.Categories != null)
                                     {
-                                        <li><a asp-action="Index" asp-controller="Shop" asp-route-categoryId="@category.Id">@category.Name <span>@(category?.Products?.Count())</span></a></li>
+                                        foreach (Category category in Model.Categories)
+                                        {
+                                            <li class=""><a asp-action="Index" asp-controller="Shop" asp-route-categoryId="@category?.Id">@category.Name <span>@(category?.Products?.Count())</span></a></li>
+                                        }
                                     }
                                 </ul>
                             </div>
@@ -118,33 +122,33 @@
                         <!-- product item list start -->
                         <div class="shop-product-wrap grid-view row mbn-50 shopList ">
                             <!-- product grid item start -->
-                            @await Html.PartialAsync("_ShopListPartial", Model.Products)
-
+                            @await Html.PartialAsync("_ShopListPartial", Model?.Products)
                             <!-- product list item start -->
                         </div>
                         <!-- product item list end -->
                         <!-- start pagination area -->
                         <div class="paginatoin-area text-center mt-45">
                             <ul class="pagination-box">
-                                @if (Model.Products.PageIndex > 1)
+                                @if (Model?.Products != null)
                                 {
-                                    <li>
-                                        <a class="Previous" asp-action="index" asp-controller="shop" asp-route-pageIndex=@(Model.Products.PageIndex -1)><i class="ion-ios-arrow-left"></i></a>
-                                    </li>
-
-                                }
-                                @for (int i = Model.Products.StartPage; i <= Model.Products.EndPage; i++)
-                                {
-                                    <li class="page-item @(Model.Products.PageIndex==i ? "active": "" )">
-                                        <a asp-action="index" asp-controller="shop" asp-route-pageIndex=@i>@i</a>
-                                    </li>
-                                }
-                                @if (Model.Products.PageIndex < Model.Products.TotalPage)
-                                {
-                                    <li>
-                                        <a class="Next" asp-action="index" asp-controller="shop" asp-route-pageIndex=@(Model.Products.PageIndex +1)><i class="ion-ios-arrow-right"></i></a>
-                                    </li>
-
+                                    if (Model.Products.PageIndex > 1)
+                                    {
+                                        <li>
+                                            <a class="Previous" asp-action="index" asp-controller="shop" asp-route-pageIndex=@(Model.Products.PageIndex -1)><i class="ion-ios-arrow-left"></i></a>
+                                        </li>
+                                    }
+                                    for (int i = Model.Products.StartPage; i <= Model.Products.EndPage; i++)
+                                    {
+                                        <li class="page-item @(Model.Products.PageIndex==i ? "active": "" )">
+                                            <a asp-action="index" asp-controller="shop" asp-route-pageIndex=@i>@i</a>
+                                        </li>
+                                    }
+                                    if (Model.Products.PageIndex < Model.Products.TotalPage)
+                                    {
+                                        <li>
+                                            <a class="Next" asp-action="index" asp-controller="shop" asp-route-pageIndex=@(Model.Products.PageIndex +1)><i class="ion-ios-arrow-right"></i></a>
+                                        </li>
+                                    }
                                 }
                             </ul>
                         </div>
