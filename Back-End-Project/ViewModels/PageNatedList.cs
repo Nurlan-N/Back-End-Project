@@ -1,4 +1,6 @@
-﻿namespace Back_End_Project.ViewModels
+﻿using Back_End_Project.Models;
+
+namespace Back_End_Project.ViewModels
 {
     public class PageNatedList<T> : List<T>
     {
@@ -50,5 +52,7 @@
 
             return new PageNatedList<T>(query.ToList(), pageIndex, totalpage);
         }
+
+        
     }
 }
