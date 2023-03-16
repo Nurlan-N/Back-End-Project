@@ -131,7 +131,7 @@ namespace Back_End_Project.Controllers
             }
         }
 
-        public async Task<IActionResult> GetBasket()
+        public IActionResult GetBasket()
         {
 
             return Json(JsonConvert.DeserializeObject<List<BasketVM>>(HttpContext.Request.Cookies["basket"]));

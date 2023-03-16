@@ -1,7 +1,7 @@
 ﻿@model ShopVM
 @{
     ViewData["Title"] = "Index";
-    
+    int sort = Model.Sort;
 }
 
 <!-- breadcrumb area start -->
@@ -39,11 +39,11 @@
                             <div class="sidebar-body">
                                 <ul class="color-list">
                                     <li><a asp-action="index" asp-controller="shop">All Products <span>@Model?.Products?.Count()</span></a> </li>
-                                    @if (Model?.Categories != null)
+                                    @if (Model.Categories != null)
                                     {
                                         foreach (Category category in Model.Categories)
                                         {
-                                            <li class=""><a asp-action="Index" asp-controller="Shop" asp-route-categoryId="@category?.Id">@category.Name <span>@(category?.Products?.Count())</span></a></li>
+                                            <li><a class="categoryName" asp-controller="Shop" asp-action="Index" asp-route-categoryId="@category?.Id" asp-route-sort="@Model.Sort" asp-route-pageIndex="@Model.Products.PageIndex">@category.Name <span>@(category?.Products?.Count())</span></a></li>
                                         }
                                     }
                                 </ul>
@@ -101,14 +101,14 @@
                                     <div class="top-bar-right">
                                         <div class="product-short">
                                             <p>Sort By : </p>
-                                            <select class="nice-select" name="sortby">
-                                                <option value="trending">Relevance</option>
-                                                <option value="sales">Name (A - Z)</option>
-                                                <option value="sales">Name (Z - A)</option>
-                                                <option value="rating">Price (Low &gt; High)</option>
-                                                <option value="date">Rating (Lowest)</option>
-                                                <option value="price-asc">Model (A - Z)</option>
-                                                <option value="price-asc">Model (Z - A)</option>
+                                            <select class="nice-select" name="sortby" data-categoryId="@Model.CategoryId" data-pageIndex="@Model.Products.PageIndex">
+                                                <option value="0">Relevance</option>
+                                                <option value="1">Name (A - Z)</option>
+                                                <option value="2" selected>Name (Z - A)</option>
+                                                <option value="3">Price (Low &gt; High)</option>
+                                                <option value="4">Rating (Lowest)</option>
+                                                <option value="5">Model (A - Z)</option>
+                                                <option value="6">Model (Z - A)</option>
                                             </select>
                                         </div>
                                         <div class="product-amount">
@@ -134,19 +134,19 @@
                                     if (Model.Products.PageIndex > 1)
                                     {
                                         <li>
-                                            <a class="Previous" asp-action="index" asp-controller="shop" asp-route-pageIndex=@(Model.Products.PageIndex -1)><i class="ion-ios-arrow-left"></i></a>
+                                            <a class="Previous" asp-action="index" asp-route-sort="@Model.Sort" asp-route-categoryId="@Model.CategoryId" asp-controller="shop" asp-route-pageIndex=@(Model.Products.PageIndex -1)><i class="ion-ios-arrow-left"></i></a>
                                         </li>
                                     }
                                     for (int i = Model.Products.StartPage; i <= Model.Products.EndPage; i++)
                                     {
                                         <li class="page-item @(Model.Products.PageIndex==i ? "active": "" )">
-                                            <a asp-action="index" asp-controller="shop" asp-route-pageIndex=@i>@i</a>
+                                            <a asp-action="index" asp-route-sort="@Model.Sort" asp-route-categoryId="@Model.CategoryId" asp-controller="shop" asp-route-pageIndex=@i>@i</a>
                                         </li>
                                     }
                                     if (Model.Products.PageIndex < Model.Products.TotalPage)
                                     {
                                         <li>
-                                            <a class="Next" asp-action="index" asp-controller="shop" asp-route-pageIndex=@(Model.Products.PageIndex +1)><i class="ion-ios-arrow-right"></i></a>
+                                            <a class="Next" asp-action="index" asp-route-sort="@Model.Sort" asp-route-categoryId="@Model.CategoryId" asp-controller="shop" asp-route-pageIndex=@(Model.Products.PageIndex +1)><i class="ion-ios-arrow-right"></i></a>
                                         </li>
                                     }
                                 }

@@ -16,11 +16,12 @@ namespace Back_End_Project.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int? categoryId, int pageIndex = 1)
+        public async Task<IActionResult> Index(int? categoryId, int sort, int pageIndex = 1)
         {
-            
             ShopVM vm = new()
             {
+                CategoryId = categoryId,
+                Sort = sort,
                 Categories = await _context.Categories.Include(c => c.Products.Where(p => p.IsDeleted == false)).Where(c => c.IsDeleted == false).ToListAsync(),
                 Products = PageNatedList<Product>.Create(_context.Products.Where(p => (categoryId == null || p.CategoryId == categoryId) && p.IsDeleted == false),pageIndex,12)
             }; 
@@ -33,17 +34,18 @@ namespace Back_End_Project.Controllers
             double minValue = 0;
             double maxValue = 0;
 
-            if (range != "" && range != null)
+            range = range?.Replace("$", "");
+
+            if (!string.IsNullOrWhiteSpace(range))
             {
-                string[] arr = range.Split(' ');
-                for (int i = 0; i < arr.Length; i++)
-                {
-                    arr[i] = arr[i][1..];
-                }
+                string[] arr = range.Split(" - ");
+                
                 minValue = double.Parse(arr[0]);
-                maxValue = double.Parse(arr[2]);
+                maxValue = double.Parse(arr[1]);
             }
-            IEnumerable<Product> product = await _context.Products.Where(p => p.IsDeleted == false && (p.Price >= minValue && p.Price <= (maxValue == 0 ? 400 : maxValue))).ToListAsync();
+            IEnumerable<Product> product = await _context.Products
+                .Where(p => p.IsDeleted == false && (p.DiscountedPrice > 0 ? p.DiscountedPrice >= minValue && p.DiscountedPrice <= (maxValue == 0 ? 400 : maxValue)
+                : p.Price >= minValue && p.Price <= (maxValue == 0 ? 400 : maxValue))).ToListAsync();
 
             return PartialView("_ShopListPartial", product);
         }
