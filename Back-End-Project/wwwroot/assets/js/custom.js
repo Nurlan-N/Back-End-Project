@@ -18,25 +18,7 @@
                 $(this).val(ss);
             })
     })
-    //$(document).on('change', 'select[name=sortby]', function () {
-    //    //console.log($(this).attr('data-categoryId'));
-    //    //console.log($(this).attr('data-pageIndex'));
-    //    //let categoryName = $('.categoryName').attr('href')
-    //    let categoryId = $(this).attr('data-categoryId');
-    //    let pageIndex = $(this).attr('data-pageIndex');
-    //    let sort = $(this).val();
-    //    //console.log(sort + " " + categoryName);
-
-    //    let url = 'shop/index?categoryId=' + categoryId + "&sort=" + sort + "&pageIndex=" + pageIndex;
-
-    //    fetch(url)
-    //        .then(res => res.text())
-    //        .then(data => {
-    //            console.log(data);
-    //            //$('.mainContainer').html(data);
-    //        })
-    //})
-
+    
     $('.rangeFilter').click(function (e) {
         e.preventDefault();
 

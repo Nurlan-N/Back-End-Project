@@ -18,7 +18,7 @@ namespace Back_End_Project.Controllers
 
         public async Task<IActionResult> Index(int? categoryId, int sort, int pageIndex = 1)
         {
-            IQueryable<Product> productList =  _context.Products.Where(p => p.IsDeleted == false); // Ürünleri veritabanından alın
+            IQueryable<Product> productList =  _context.Products.Where(p => p.IsDeleted == false); //  Productlar
 
             if (sort == 1) // A-Z
             {
@@ -28,11 +28,11 @@ namespace Back_End_Project.Controllers
             {
                 productList = productList.OrderByDescending(p => p.Title);
             }
-            else if (sort == 3) // Pahalıdan ucuz
+            else if (sort == 3) // Pahalıdan ucuza
             {
                 productList = productList.OrderByDescending(p => (p.DiscountedPrice > 0 ? p.DiscountedPrice : p.Price));
             }
-            else if (sort == 4) // Ucuzdan pahalı
+            else if (sort == 4) // Ucuzdan bahaya
             {
                 productList = productList.OrderBy(p => (p.DiscountedPrice > 0 ? p.DiscountedPrice : p.Price));
             }
