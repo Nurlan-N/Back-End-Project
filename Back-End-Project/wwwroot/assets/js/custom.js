@@ -1,23 +1,41 @@
 ﻿$(document).ready(function () {
-
     $(document).on('change', 'select[name=sortby]', function () {
-        //console.log($(this).attr('data-categoryId'));
-        //console.log($(this).attr('data-pageIndex'));
         let categoryName = $('.categoryName').attr('href')
-        //let categoryId = $(this).attr('data-categoryId');
-        //let pageIndex = $(this).attr('data-pageIndex');
+        let categoryId = $(this).attr('data-categoryId');
+        let pageIndex = $(this).attr('data-pageIndex');
         let sort = $(this).val();
-        console.log(sort + " " + categoryName);
 
-        //let url = 'shop/index?categoryId=' + categoryId + "&sort=" + sort + "&pageIndex=" + pageIndex;
+        let url = '/shop/Index?categoryId=' + categoryId + "&sort=" + sort + "&pageIndex=" + pageIndex;
 
-        //fetch(url)
-        //    .then(res => res.text())
-        //    .then(data => {
-        //        console.log(data);
-        //        $('.maiinContainer').html(data);
-        //    })
+        window.location.href = url;
+        //$(this).val(sort);
+        let ss = window.location.pathname.split("&").split("=")[1];
+        console.log(ss);
+        fetch(url)
+            .then(res => res.text())
+            .then(data => {
+                console.log(ss);
+                $(this).val(ss);
+            })
     })
+    //$(document).on('change', 'select[name=sortby]', function () {
+    //    //console.log($(this).attr('data-categoryId'));
+    //    //console.log($(this).attr('data-pageIndex'));
+    //    //let categoryName = $('.categoryName').attr('href')
+    //    let categoryId = $(this).attr('data-categoryId');
+    //    let pageIndex = $(this).attr('data-pageIndex');
+    //    let sort = $(this).val();
+    //    //console.log(sort + " " + categoryName);
+
+    //    let url = 'shop/index?categoryId=' + categoryId + "&sort=" + sort + "&pageIndex=" + pageIndex;
+
+    //    fetch(url)
+    //        .then(res => res.text())
+    //        .then(data => {
+    //            console.log(data);
+    //            //$('.mainContainer').html(data);
+    //        })
+    //})
 
     $('.rangeFilter').click(function (e) {
         e.preventDefault();

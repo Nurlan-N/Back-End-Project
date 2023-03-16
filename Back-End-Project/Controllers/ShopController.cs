@@ -18,12 +18,31 @@ namespace Back_End_Project.Controllers
 
         public async Task<IActionResult> Index(int? categoryId, int sort, int pageIndex = 1)
         {
+            IQueryable<Product> productList =  _context.Products.Where(p => p.IsDeleted == false); // Ürünleri veritabanından alın
+
+            if (sort == 1) // A-Z
+            {
+                productList = productList.OrderBy(p => p.Title);
+            }
+            else if (sort == 2) // Z-A
+            {
+                productList = productList.OrderByDescending(p => p.Title);
+            }
+            else if (sort == 3) // Pahalıdan ucuz
+            {
+                productList = productList.OrderByDescending(p => (p.DiscountedPrice > 0 ? p.DiscountedPrice : p.Price));
+            }
+            else if (sort == 4) // Ucuzdan pahalı
+            {
+                productList = productList.OrderBy(p => (p.DiscountedPrice > 0 ? p.DiscountedPrice : p.Price));
+            }
+            
             ShopVM vm = new()
             {
                 CategoryId = categoryId,
                 Sort = sort,
                 Categories = await _context.Categories.Include(c => c.Products.Where(p => p.IsDeleted == false)).Where(c => c.IsDeleted == false).ToListAsync(),
-                Products = PageNatedList<Product>.Create(_context.Products.Where(p => (categoryId == null || p.CategoryId == categoryId) && p.IsDeleted == false),pageIndex,12)
+                Products = PageNatedList<Product>.Create(productList.Where(p => (categoryId == null || p.CategoryId == categoryId) && p.IsDeleted == false),pageIndex,12)
             }; 
             
             return View(vm);
@@ -44,7 +63,7 @@ namespace Back_End_Project.Controllers
                 maxValue = double.Parse(arr[1]);
             }
             IEnumerable<Product> product = await _context.Products
-                .Where(p => p.IsDeleted == false && (p.DiscountedPrice > 0 ? p.DiscountedPrice >= minValue && p.DiscountedPrice <= (maxValue == 0 ? 400 : maxValue)
+                .Where(p => p.IsDeleted == false && (p.DiscountedPrice > 0  ? p.DiscountedPrice >= minValue && p.DiscountedPrice <= (maxValue == 0 ? 400 : maxValue)
                 : p.Price >= minValue && p.Price <= (maxValue == 0 ? 400 : maxValue))).ToListAsync();
 
             return PartialView("_ShopListPartial", product);

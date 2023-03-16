@@ -2,6 +2,16 @@
 @{
     ViewData["Title"] = "Index";
     int sort = Model.Sort;
+    var sortOptions = new List<SelectListItem>
+    {
+       new SelectListItem{ Text="Relevance", Value = "0", Selected = sort.ToString() == "0" },
+       new SelectListItem{ Text="Name (A - Z)", Value = "1", Selected = sort.ToString() == "1" },
+       new SelectListItem{ Text="Name (Z - A)", Value = "2", Selected = sort.ToString() == "2" },
+       new SelectListItem{ Text="Price (Low &gt; High)", Value = "3", Selected = sort.ToString() == "3" },
+       new SelectListItem{ Text="Rating (Lowest)", Value = "4", Selected = sort.ToString() == "4" },
+       new SelectListItem{ Text="Model (A - Z)", Value = "5", Selected = sort.ToString() == "5" },
+       new SelectListItem{ Text="Model (Z - A)", Value = "6", Selected = sort.ToString() == "6" }
+    };
 }
 
 <!-- breadcrumb area start -->
@@ -101,14 +111,7 @@
                                     <div class="top-bar-right">
                                         <div class="product-short">
                                             <p>Sort By : </p>
-                                            <select class="nice-select" name="sortby" data-categoryId="@Model.CategoryId" data-pageIndex="@Model.Products.PageIndex">
-                                                <option value="0">Relevance</option>
-                                                <option value="1">Name (A - Z)</option>
-                                                <option value="2" selected>Name (Z - A)</option>
-                                                <option value="3">Price (Low &gt; High)</option>
-                                                <option value="4">Rating (Lowest)</option>
-                                                <option value="5">Model (A - Z)</option>
-                                                <option value="6">Model (Z - A)</option>
+                                            <select class="nice-select" name="sortby" asp-for=@Model.Sort asp-items=sortOptions data-categoryId="@Model.CategoryId" data-pageIndex="@Model.Products.PageIndex">
                                             </select>
                                         </div>
                                         <div class="product-amount">
