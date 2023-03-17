@@ -4,6 +4,7 @@ using Back_End_Project.Extentions;
 using Back_End_Project.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Back_End_Project.Helpers;
 
 namespace Back_End_Project.Areas.Manage.Controllers
 {
@@ -59,7 +60,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
                     ModelState.AddModelError("ImageFile", "ImageFile File Yalniz 300Kb  ola biler");
                     return View(product);
                 }
-                product.Image = await product.ImageFile.CreateFileAsync(_webHostEnvironment, "assets", "img");
+                product.Image = await product.ImageFile.CreateFileAsync(_webHostEnvironment, "assets", "img", "product");
             }
             else
             {
@@ -68,7 +69,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
             }
           
 
-            if (product.Files.Count() <= 6)
+            if (product?.Files?.Count() <= 6)
             {
                 if (product.Files != null && product.Files.Count() > 0)
                 {
@@ -91,9 +92,12 @@ namespace Back_End_Project.Areas.Manage.Controllers
                             CreatedAt = DateTime.UtcNow.AddDays(4),
                             CreatedBy = "System"
                         };
+                        productImages.Add(productImage);
                     }
 
                     product.ProductImages = productImages;
+                    product.CreatedAt = DateTime.UtcNow.AddDays(4);
+                    product.CreatedBy = "System";
                 }
             }
             else
@@ -112,6 +116,133 @@ namespace Back_End_Project.Areas.Manage.Controllers
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Update(int? id)
+        {
+            if (id == null) return BadRequest();
+
+            Product product = await _context.Products
+                .Include(p => p.ProductImages.Where(t => t.IsDeleted == false))
+                .FirstOrDefaultAsync(p => p.Id == id && p.IsDeleted == false);
+            if (product == null) return NotFound();
+
+            ViewBag.Categories = await _context.Categories
+                .Where(c => c.IsDeleted == false ).ToListAsync();
+            ViewBag.Tags = await _context.Tags.Where(b => b.IsDeleted == false).ToListAsync();
+
+
+            return View(product);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(int? id, Product product)
+        {
+            ViewBag.Categories = await _context.Categories
+                .Where(c => c.IsDeleted == false ).ToListAsync();
+            ViewBag.Tags = await _context.Tags.Where(b => b.IsDeleted == false).ToListAsync();
+
+            if (!ModelState.IsValid) return View();
+
+            if (id == null || id != product.Id) return BadRequest();
+
+            Product dbProduct = await _context.Products
+                .Include(p => p.ProductImages.Where(pImages => pImages.IsDeleted == false))
+                .FirstOrDefaultAsync(c => c.Id == id && c.IsDeleted == false);
+
+            if (dbProduct == null) return NotFound();
+
+            int canUpload = 6 - dbProduct.ProductImages.Count();
+            if (product.Files != null && canUpload < product.Files.Count())
+            {
+                ModelState.AddModelError("Files", $"Maksimum {canUpload} Qeder sekil yukleye bilersiniz");
+                return View(product);
+
+            }
+            if (product.Files != null && product.Files.Count() > 0)
+            {
+                List<ProductImage> productImages = new List<ProductImage>();
+                foreach (IFormFile file in product.Files)
+                {
+                    if (!file.CheckFileContentType("image/jpeg"))
+                    {
+                        ModelState.AddModelError("file", "Main File Yalniz JPG Formatda ola biler");
+                        return View(product);
+                    }
+                    if (!file.CheckFileLength(300))
+                    {
+                        ModelState.AddModelError("file", "Main File Yalniz 300Kb  ola biler");
+                        return View(product);
+                    }
+                    ProductImage productImage = new ProductImage()
+                    {
+                        Image = await file.CreateFileAsync(_webHostEnvironment, "assets", "img", "product"),
+                        CreatedAt = DateTime.UtcNow.AddDays(4),
+                        CreatedBy = "System"
+                    };
+                    productImages.Add(productImage);
+                }
+
+                dbProduct.ProductImages.AddRange(productImages);
+            }
+            //StartImageFile
+            if (product.ImageFile != null)
+            {
+                if (!product.ImageFile.CheckFileContentType("image/jpeg"))
+                {
+                    ModelState.AddModelError("MainFile", "Main File Yalniz JPG Formatda ola biler");
+                    return View(product);
+                }
+                if (!product.ImageFile.CheckFileLength(300))
+                {
+                    ModelState.AddModelError("MainFile", "Main File Yalniz 300Kb  ola biler");
+                    return View(product);
+                }
+                FileHelpers.DeleteFile(dbProduct.Image, _webHostEnvironment, "assets", "img", "product");
+
+                dbProduct.Image = await product.ImageFile.CreateFileAsync(_webHostEnvironment, "assets", "img", "product");
+            }
+            if (product.Price != null) { dbProduct.Price = product.Price; }
+            if (product.DiscountedPrice != null) { dbProduct.DiscountedPrice = product.DiscountedPrice; }
+            if (product.Count != null) { dbProduct.Count = product.Count; }
+            if (product.ExTax != null) { dbProduct.ExTax = product.ExTax; }
+            if (product.Description != null) { dbProduct.Description = product.Description; }
+
+            await _context.SaveChangesAsync();
+
+
+
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> DeleteImage(int id, int imageId)
+        {
+            if (id == null) return BadRequest();
+
+            if (imageId == null) return BadRequest();
+
+            Product product = await _context.Products
+                .Include(p => p.ProductImages.Where(p => p.IsDeleted == false))
+                .FirstOrDefaultAsync(P => P.IsDeleted == false && P.Id == id);
+
+            if (product == null) return NotFound();
+
+            if (product.ProductImages.Any(p => p.Id == imageId))
+            {
+                product.ProductImages.FirstOrDefault(product => product.Id == imageId).IsDeleted = true;
+                await _context.SaveChangesAsync();
+
+                FileHelpers.DeleteFile(product.ProductImages.FirstOrDefault(product => product.Id == imageId).Image, _webHostEnvironment, "assets", "img", "product");
+
+            }
+            else
+            {
+                return BadRequest();
+            }
+            List<ProductImage> productImages = product.ProductImages.Where(p => p.IsDeleted == false).ToList();
+
+            
+
+            return PartialView("_ProductImagePartial", productImages);
         }
     }
 }
