@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Back_End_Project.Models
 {
@@ -11,12 +12,15 @@ namespace Back_End_Project.Models
         [Column(TypeName = "money")]
         public double Price { get; set; }
         [Column(TypeName = "money")]
+        [AllowNull]
         public double DiscountedPrice { get; set; }
         [Column(TypeName = "money")]
         public double ExTax { get; set; }
         public int Count { get; set; }
         [StringLength(1000)]
         public string? Description { get; set; }
+        [StringLength(5000)]
+        public string? LongDescription { get; set; }
         [StringLength(4, MinimumLength = 4)]
         public string? Seria { get; set; }
         public int Code { get; set; }

@@ -18,7 +18,7 @@ namespace Back_End_Project.Controllers
 
         public async Task<IActionResult> Index(int? categoryId, int sort, int pageIndex = 1)
         {
-            IQueryable<Product> productList =  _context.Products.Where(p => p.IsDeleted == false); //  Productlar
+            IQueryable<Product> productList = _context.Products.Where(p => p.IsDeleted == false); //  Productlar
 
             if (sort == 1) // A-Z
             {
@@ -36,15 +36,15 @@ namespace Back_End_Project.Controllers
             {
                 productList = productList.OrderBy(p => (p.DiscountedPrice > 0 ? p.DiscountedPrice : p.Price));
             }
-            
+
             ShopVM vm = new()
             {
                 CategoryId = categoryId,
                 Sort = sort,
                 Categories = await _context.Categories.Include(c => c.Products.Where(p => p.IsDeleted == false)).Where(c => c.IsDeleted == false).ToListAsync(),
-                Products = PageNatedList<Product>.Create(productList.Where(p => (categoryId == null || p.CategoryId == categoryId) && p.IsDeleted == false),pageIndex,12)
-            }; 
-            
+                Products = PageNatedList<Product>.Create(productList.Where(p => (categoryId == null || p.CategoryId == categoryId) && p.IsDeleted == false), pageIndex, 12)
+            };
+
             return View(vm);
         }
         

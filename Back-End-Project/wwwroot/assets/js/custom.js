@@ -8,13 +8,11 @@
         let url = '/shop/Index?categoryId=' + categoryId + "&sort=" + sort + "&pageIndex=" + pageIndex;
 
         window.location.href = url;
-        //$(this).val(sort);
         let ss = window.location.pathname.split("&").split("=")[1];
         console.log(ss);
         fetch(url)
             .then(res => res.text())
             .then(data => {
-                console.log(ss);
                 $(this).val(ss);
             })
     })

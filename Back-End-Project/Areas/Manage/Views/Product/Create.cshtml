@@ -1,0 +1,92 @@
+﻿@model Product
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="col-lg-2">
+    <h1 class="h3 mb-4 text-gray-800">Product Create Page</h1>
+</div>
+<div class="row">
+    <div class="col-lg-8">
+        <form method="post" enctype="multipart/form-data">
+            <!-- TITLE -->
+            <div class="mb-3">
+                <label asp-for=Title class="form-label"></label>
+                <input asp-for=Title class="form-control">
+                <span asp-validation-for=Title class="text text-danger"></span>
+            </div>
+            <!-- PRICE -->
+            <div class="mb-3">
+                <label asp-for=Price class="form-label"></label>
+                <input asp-for=Price class="form-control">
+                <span asp-validation-for=Price class="text text-danger"></span>
+            </div>
+            <!-- DiscountedPrice -->
+            <div class="mb-3">
+                <label asp-for=DiscountedPrice class="form-label"></label>
+                <input asp-for=DiscountedPrice class="form-control">
+                <span asp-validation-for=DiscountedPrice class="text text-danger"></span>
+            </div>
+            <!-- ExTax -->
+            <div class="mb-3">
+                <label asp-for=ExTax class="form-label"></label>
+                <input asp-for=ExTax class="form-control">
+                <span asp-validation-for=ExTax class="text text-danger"></span>
+            </div>
+            <!-- Count -->
+            <div class="mb-3">
+                <label asp-for=Count class="form-label"></label>
+                <input asp-for=Count class="form-control">
+                <span asp-validation-for=Count class="text text-danger"></span>
+            </div>
+
+            <!-- Image -->
+            <div class="form-group">
+                <label asp-for=ImageFile></label>
+                <input asp-for="ImageFile" accept="image/jpeg" type="file" class="form-control-file">
+                <span asp-validation-for=ImageFile class="text text-danger"></span>
+            </div>
+            <!-- Files -->
+            <div class="form-group">
+                <label asp-for=Files></label>
+                <input multiple asp-for=Files accept="image/jpeg" type="file" class="form-control-file">
+                <span asp-validation-for=Files class="text text-danger"></span>
+            </div>
+            <!-- CategoryId -->
+            <div class="form-group">
+                <label asp-for="CategoryId"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="new SelectList(ViewBag.Categories,nameof(Category.Id), nameof(Category.Name))">
+                </select>
+                <span asp-validation-for=CategoryId class="text text-danger"></span>
+            </div>
+            <!-- Description -->
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            </div>>
+            <!-- LongDescription -->
+            <div id="editor" class="form-group">
+                <label asp-for="LongDescription"></label>
+                <textarea asp-for="LongDescription" class="form-control" rows="3"></textarea>
+            </div>>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    @await Html.PartialAsync("_Validations")
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
+
+}
+
+
