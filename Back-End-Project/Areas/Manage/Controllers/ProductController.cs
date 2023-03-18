@@ -37,7 +37,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
         public async Task<IActionResult> Create(Product product)
         {
             ViewBag.Categories = await _context.Categories
-                .Where(c => c.IsDeleted == false ).ToListAsync();
+                .Where(c => c.IsDeleted == false).ToListAsync();
             ViewBag.Tags = await _context.Tags.Where(b => b.IsDeleted == false).ToListAsync();
             if (!ModelState.IsValid) return View(product);
 
@@ -67,7 +67,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
                 ModelState.AddModelError("ImageFile", "ImageFile File mutleqdir");
                 return View(product);
             }
-          
+
 
             if (product?.Files?.Count() <= 6)
             {
@@ -128,7 +128,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
             if (product == null) return NotFound();
 
             ViewBag.Categories = await _context.Categories
-                .Where(c => c.IsDeleted == false ).ToListAsync();
+                .Where(c => c.IsDeleted == false).ToListAsync();
             ViewBag.Tags = await _context.Tags.Where(b => b.IsDeleted == false).ToListAsync();
 
 
@@ -138,7 +138,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
         public async Task<IActionResult> Update(int? id, Product product)
         {
             ViewBag.Categories = await _context.Categories
-                .Where(c => c.IsDeleted == false ).ToListAsync();
+                .Where(c => c.IsDeleted == false).ToListAsync();
             ViewBag.Tags = await _context.Tags.Where(b => b.IsDeleted == false).ToListAsync();
 
             if (!ModelState.IsValid) return View();
@@ -240,9 +240,29 @@ namespace Back_End_Project.Areas.Manage.Controllers
             }
             List<ProductImage> productImages = product.ProductImages.Where(p => p.IsDeleted == false).ToList();
 
-            
+
 
             return PartialView("_ProductImagePartial", productImages);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id, int pageIndex = 1)
+        {
+            if (id == null) { return BadRequest(); }
+
+            Product product = await _context.Products.FirstOrDefaultAsync(p => p.IsDeleted == false && p.Id == id);
+
+            if (product == null) { return NotFound(); }
+
+            product.IsDeleted = true;
+            product.DeletedBy = "System";
+            product.DeletedAt = DateTime.UtcNow.AddHours(4);
+
+            await _context.SaveChangesAsync();
+
+            IQueryable<Product> products = _context.Products.Where(b => b.IsDeleted == false).OrderByDescending(b => b.Id);
+
+
+            return View("index", PageNatedList<Product>.Create(products, pageIndex, 3));
         }
     }
 }

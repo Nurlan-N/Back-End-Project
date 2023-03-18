@@ -23,7 +23,6 @@
                     <th>Name</th>
                     <th>Created At</th>
                     <th>Created By</th>
-                    <th>Product Count</th>
                     <th>Settings</th>
 
                 </tr>
@@ -42,7 +41,7 @@
                         <td>
                             <a asp-action="detail" asp-area="manage" asp-controller="product" asp-route-id="@product.Id" class="btn btn-primary">Detail</a>
                             <a asp-action="update" asp-area="manage" asp-controller="product" asp-route-id="@product.Id" class="btn btn-warning">Update</a>
-                            <a asp-action="delete" asp-area="manage" asp-controller="product" asp-route-id="@product.Id" class="btn btn-danger">Delete</a>
+                            <a asp-action="delete" asp-area="manage" asp-controller="product" asp-route-id="@product.Id" class="btn btn-danger deleteBtn">Delete</a>
                         </td>
                     </tr>
                 }
