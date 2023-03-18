@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="col-lg-2">
-        <h1 class="h3 mb-4 text-gray-800">Categpry Page</h1>
+        <h1 class="h3 mb-4 text-gray-800">Settings Page</h1>
     </div>
     <div class="col-lg-2">
         <a class="btn btn-primary mb-4" asp-action="create" asp-controller="Category" asp-area="manage">Create</a>
@@ -35,7 +35,6 @@
                         <td>@setting.Value</td>
                         
                         <td>
-                            <a asp-action="detail" asp-area="manage" asp-controller="setting" asp-route-id="@setting.Id" class="btn btn-primary">Detail</a>
                             <a asp-action="update" asp-area="manage" asp-controller="setting" asp-route-id="@setting.Id" class="btn btn-warning">Update</a>
                         </td>
                     </tr>
@@ -50,20 +49,20 @@
                 @if (Model.PageIndex > 1)
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-area="manage" asp-action="index" asp-controller="category" asp-route-pageIndex=@(Model.PageIndex -1)>Previous</a>
+                        <a class="page-link" asp-area="manage" asp-action="index" asp-controller="setting" asp-route-pageIndex=@(Model.PageIndex -1)>Previous</a>
                     </li>
 
                 }
                 @for (int i = 1; i <= Model.EndPage; i++)
                 {
                     <li class="page-item @(Model.PageIndex==i ? "active": "" )">
-                        <a class="page-link" asp-area="manage" asp-action="index" asp-controller="category" asp-route-pageIndex=@i>@i</a>
+                        <a class="page-link" asp-area="manage" asp-action="index" asp-controller="setting" asp-route-pageIndex=@i>@i</a>
                     </li>
                 }
                 @if (Model.PageIndex < Model.TotalPage)
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-area="manage" asp-action="index" asp-controller="category" asp-route-pageIndex=@(Model.PageIndex +1)>Next</a>
+                        <a class="page-link" asp-area="manage" asp-action="index" asp-controller="setting" asp-route-pageIndex=@(Model.PageIndex +1)>Next</a>
                     </li>
 
                 }
@@ -71,4 +70,7 @@
         </nav>
     </div>
 </div>
+@section Scripts{
+    @await Html.PartialAsync("_Validations")
+}
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Back_End_Project.Helpers;
 using NuGet.Protocol.Plugins;
+using System.Drawing.Drawing2D;
 
 namespace Back_End_Project.Areas.Manage.Controllers
 {
@@ -117,6 +118,19 @@ namespace Back_End_Project.Areas.Manage.Controllers
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Detail(int? id)
+        {
+            ViewBag.Categories = await _context.Categories
+                .Where(c => c.IsDeleted == false).ToListAsync();
+            if (id == null) { return BadRequest(); }
+            Product product = await _context.Products
+                .FirstOrDefaultAsync(p => p.IsDeleted == false && p.Id == id);
+
+            if (product == null) { return NotFound(); }
+
+            return View(product);
         }
         [HttpGet]
         public async Task<IActionResult> Update(int? id)
@@ -263,8 +277,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
 
             IQueryable<Product> products = _context.Products.Where(b => b.IsDeleted == false).OrderByDescending(b => b.Id);
 
-
-            return View("index", PageNatedList<Product>.Create(products, pageIndex, 3));
+            return PartialView("_ProductIndexPartial", PageNatedList<Product>.Create(products, pageIndex, 3));
         }
     }
 }
