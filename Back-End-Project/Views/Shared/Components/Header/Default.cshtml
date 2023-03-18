@@ -16,7 +16,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6">
                         <div class="welcome-message">
-                            <p>Welcome to Juan online store</p>
+                            <p>@Model.FirstOrDefault(s => s.Key == "Slogan").Value</p>
                         </div>
                     </div>
                     <div class="col-lg-6 text-right">

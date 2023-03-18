@@ -1,0 +1,24 @@
+﻿@model Setting
+@{
+    ViewData["Title"] = "Update";
+    //IEnumerable<Category> categories = ViewBag.Categories;
+}
+
+<div class="col-lg-2">
+    <h1 class="h3 mb-4 text-gray-800">Category Update Page</h1>
+</div>
+<div class="row">
+    <div class="col-lg-8">
+        <form method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label asp-for=Value class="form-label"></label>
+                <input asp-for=Value class="form-control">
+                <span asp-validation-for=Value class="text text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    @await Html.PartialAsync("_Validations")
+}

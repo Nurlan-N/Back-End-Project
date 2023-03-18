@@ -21,6 +21,7 @@
                     <th>№</th>
                     <th>Key</th>
                     <th>Value</th>                  
+                    <th>Settings</th>                  
                 </tr>
             </thead>
             <tbody>
@@ -34,9 +35,8 @@
                         <td>@setting.Value</td>
                         
                         <td>
-                            <a asp-action="detail" asp-area="manage" asp-controller="category" asp-route-id="@setting.Id" class="btn btn-primary">Detail</a>
-                            <a asp-action="update" asp-area="manage" asp-controller="category" asp-route-id="@setting.Id" class="btn btn-warning">Update</a>
-                            <a asp-action="delete" asp-area="manage" asp-controller="category" asp-route-id="@setting.Id" class="btn btn-danger">Delete</a>
+                            <a asp-action="detail" asp-area="manage" asp-controller="setting" asp-route-id="@setting.Id" class="btn btn-primary">Detail</a>
+                            <a asp-action="update" asp-area="manage" asp-controller="setting" asp-route-id="@setting.Id" class="btn btn-warning">Update</a>
                         </td>
                     </tr>
                 }
