@@ -1,6 +1,16 @@
 ﻿@model IDictionary<string,string>
 @inject ILayoutService layoutservices
+@inject UserManager<AppUser> userManager
 
+@{
+    AppUser appUser = new AppUser();
+
+    if (User?.Identity?.Name != null)
+    {
+        appUser = await userManager.FindByNameAsync(User.Identity.Name);
+    }
+
+}
 @{
     IEnumerable<BasketVM> basketVMs = await layoutservices.GetBaskets();
 
@@ -97,8 +107,9 @@
                                             <i class="ion-ios-gear-outline"></i>
                                         </a>
                                         <ul class="dropdown-list">
-                                            <li><a href="login-register.html">login</a></li>
-                                            <li><a href="login-register.html">register</a></li>
+                                            <li><a>@(appUser != null ? $"{appUser.Name} {appUser.SurName}" : "")</a></li>
+                                            <li><a asp-controller="account" asp-action="login">login</a></li>
+                                            <li><a asp-controller="account" asp-action="register">register</a></li>
                                             <li><a href="my-account.html">my account</a></li>
                                         </ul>
                                     </li>

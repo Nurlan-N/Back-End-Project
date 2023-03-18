@@ -27,10 +27,21 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
 }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
-builder.Services.AddScoped<ILayoutService, LayoutService >();
+builder.Services.AddScoped<ILayoutService, LayoutService>();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+});
 builder.Services.AddHttpContextAccessor();
 
+//AddScoped(), AddTransient(),AddSingelton();
 var app = builder.Build();
+
+app.UseSession();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 
 app.UseStaticFiles();
 app.MapControllerRoute(
@@ -40,3 +51,4 @@ app.MapControllerRoute(
 app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
