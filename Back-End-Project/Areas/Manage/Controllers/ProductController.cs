@@ -5,6 +5,7 @@ using Back_End_Project.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Back_End_Project.Helpers;
+using NuGet.Protocol.Plugins;
 
 namespace Back_End_Project.Areas.Manage.Controllers
 {
@@ -208,7 +209,8 @@ namespace Back_End_Project.Areas.Manage.Controllers
             if (product.Description != null) { dbProduct.Description = product.Description; }
 
             await _context.SaveChangesAsync();
-
+            product.UpdatetAt = DateTime.UtcNow.AddDays(4);
+            product.UpdatetBy = "Admin";
 
 
             return RedirectToAction("Index");

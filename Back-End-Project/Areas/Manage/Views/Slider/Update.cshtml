@@ -1,0 +1,46 @@
+﻿@model Slider
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="col-lg-2">
+    <h1 class="h3 mb-4 text-gray-800">Product Create Page</h1>
+</div>
+<div class="row">
+    <div class="col-lg-8">
+        <form method="post" enctype="multipart/form-data">
+            <!-- TITLE -->
+            <div class="mb-3">
+                <label asp-for=SubTitle class="form-label"></label>
+                <input asp-for=SubTitle class="form-control">
+                <span asp-validation-for=SubTitle class="text text-danger"></span>
+            </div>
+            <!-- TITLE -->
+            <div class="mb-3">
+                <label asp-for=Title class="form-label"></label>
+                <input asp-for=Title class="form-control">
+                <span asp-validation-for=Title class="text text-danger"></span>
+            </div>
+            <!-- Image -->
+            <div class="form-group">
+                <label asp-for=ImageFile></label>
+                <input asp-for="ImageFile" accept="image/jpeg" type="file" class="form-control-file">
+                <span asp-validation-for=ImageFile class="text text-danger"></span>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            </div>>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    @await Html.PartialAsync("_Validations")
+}
+
+
