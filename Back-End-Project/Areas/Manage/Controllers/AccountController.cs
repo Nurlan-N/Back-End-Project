@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Back_End_Project.Areas.Manage.Controllers
 {
     [Area("Manage")]
+    [Authorize(Roles = "SuperAdmin")]
+
     public class AccountController : Controller
     {
         private readonly UserManager<AppUser> _userManager;

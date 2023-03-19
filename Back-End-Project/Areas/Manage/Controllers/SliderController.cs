@@ -2,13 +2,17 @@
 using Back_End_Project.Extentions;
 using Back_End_Project.Models;
 using Back_End_Project.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
+using System.Data;
 
 namespace Back_End_Project.Areas.Manage.Controllers
 {
     [Area("manage")]
+    [Authorize(Roles = "SuperAdmin")]
+
     public class SliderController : Controller
     {
         private readonly AppDbContext _context;

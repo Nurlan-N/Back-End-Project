@@ -2,12 +2,15 @@
 using Back_End_Project.Helpers;
 using Back_End_Project.Models;
 using Back_End_Project.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Back_End_Project.Areas.Manage.Controllers
 {
     [Area("manage")]
+    [Authorize(Roles = "SuperAdmin")]
     public class CategoryController : Controller
     {
         private readonly AppDbContext _context;
@@ -56,6 +59,18 @@ namespace Back_End_Project.Areas.Manage.Controllers
 
 
             return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Detail(int? id)
+        {
+            if (id == null) { return BadRequest(); }
+             Category category = await _context.Categories
+                .Include(c => c.Products.Where(p => p.IsDeleted == false))
+                .FirstOrDefaultAsync(c => c.IsDeleted == false && c.Id == id);
+
+            if (category == null) { return NotFound(); }
+
+            return View(category);
         }
         [HttpGet]
         public async Task<IActionResult> Update(int? id)

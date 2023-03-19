@@ -12,6 +12,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
 {
     [Area("manage")]
     [Authorize(Roles = "SuperAdmin")]
+
     public class OnlineController : Controller
     {
         private readonly AppDbContext _context;

@@ -7,10 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Back_End_Project.Helpers;
 using NuGet.Protocol.Plugins;
 using System.Drawing.Drawing2D;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Back_End_Project.Areas.Manage.Controllers
 {
     [Area("manage")]
+    [Authorize(Roles = "SuperAdmin")]
+
     public class ProductController : Controller
     {
         private readonly AppDbContext _context;
@@ -261,7 +265,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
             return PartialView("_ProductImagePartial", productImages);
         }
         [HttpGet]
-        public async Task<IActionResult> Delete(int? id, int pageIndex = 1)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) { return BadRequest(); }
 
@@ -275,9 +279,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
 
             await _context.SaveChangesAsync();
 
-            IQueryable<Product> products = _context.Products.Where(b => b.IsDeleted == false).OrderByDescending(b => b.Id);
-
-            return PartialView("_ProductIndexPartial", PageNatedList<Product>.Create(products, pageIndex, 3));
+            return PartialView("_ProductIndexPartial");
         }
     }
 }

@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@inject UserManager<AppUser> userManeger
+@{
+    AppUser appUser = null;
+
+    {
+        appUser = await userManeger.FindByNameAsync(User.Identity?.Name);
+
+    }
+}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -291,7 +300,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Nurlan NAzarov</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">@(appUser != null ? appUser.Name + " " + appUser.SurName : "")</span>
                                 <img class="img-profile rounded-circle"
                                      src="~/manage/img/undraw_profile_2.svg">
                             </a>
