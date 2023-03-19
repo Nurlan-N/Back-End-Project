@@ -1,4 +1,5 @@
-﻿using Back_End_Project.Models;
+﻿using Back_End_Project.DataAccessLayer;
+using Back_End_Project.Models;
 using Back_End_Project.ViewModels.AccountViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,15 +8,17 @@ namespace Back_End_Project.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> userManager,
+        public AccountController(UserManager<AppUser> userManager,AppDbContext context,
             RoleManager<IdentityRole> roleManager,
             SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
+            _context = context;
             _roleManager = roleManager;
             _signInManager = signInManager;
         }
@@ -79,7 +82,8 @@ namespace Back_End_Project.Controllers
                 return View(loginVM);
             }
             appUser.LastOnline = DateTime.UtcNow.AddHours(4);
-
+            
+            await _context.SaveChangesAsync();
             return RedirectToAction("index", "Home");
         }
         [HttpGet]
