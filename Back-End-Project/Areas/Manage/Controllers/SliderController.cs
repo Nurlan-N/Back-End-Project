@@ -86,6 +86,17 @@ namespace Back_End_Project.Areas.Manage.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
+        public async Task<IActionResult> Detail(int? id)
+        {
+            if (id == null) { return BadRequest(); }
+            Slider slider = await _context.Sliders
+                .FirstOrDefaultAsync(p => p.IsDeleted == false && p.Id == id);
+
+            if (slider == null) { return NotFound(); }
+
+            return View(slider);
+        }
+        [HttpGet]
         public async Task<IActionResult> Update(int? id)
         {
             if (id == null) return BadRequest();
