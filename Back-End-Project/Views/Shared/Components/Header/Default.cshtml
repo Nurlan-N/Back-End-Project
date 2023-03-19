@@ -108,9 +108,18 @@
                                         </a>
                                         <ul class="dropdown-list">
                                             <li><a>@(appUser != null ? $"{appUser.Name} {appUser.SurName}" : "")</a></li>
-                                            <li><a asp-controller="account" asp-action="login">login</a></li>
-                                            <li><a asp-controller="account" asp-action="register">register</a></li>
-                                            <li><a href="my-account.html">my account</a></li>
+                                            @if (appUser?.Email == null)
+                                            {
+                                                <li><a asp-controller="account" asp-action="login">Sign in</a></li>
+                                                <li><a asp-controller="account" asp-action="register">Register</a></li>
+
+                                            }
+                                            else
+                                            {
+                                                <li><a asp-controller="account" asp-action="myaccount">My account</a></li>
+                                                <li><a asp-controller="account" asp-action="logout">Log Out</a></li>
+                                            }
+                                            
                                         </ul>
                                     </li>
                                     <li>

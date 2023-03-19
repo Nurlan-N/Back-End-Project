@@ -35,7 +35,8 @@ namespace Back_End_Project.Areas.Manage.Controllers
                     Name = x.Name,
                     SurName = x.SurName,
                     Email = x.Email,
-                    UserName = x.UserName
+                    UserName = x.UserName,
+                    LockoutEnd = (DateTimeOffset)x.LockoutEnd
                 })
             .ToListAsync();
 
@@ -90,6 +91,39 @@ namespace Back_End_Project.Areas.Manage.Controllers
 
             await _userManager.RemoveFromRoleAsync(appUser, roleName);
             await _userManager.AddToRoleAsync(appUser, newRoleName);
+
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Block(string? id)
+        {
+            AppUser user = await _userManager.FindByIdAsync(id);
+
+            return View(user);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Block(AppUser appUser )
+        {
+            if (!ModelState.IsValid) { return View(appUser); }
+
+            AppUser user = await _userManager.FindByIdAsync(appUser.Id);
+            DateTimeOffset? lockoutEnd = appUser.LockoutEnd;
+            await _userManager.SetLockoutEndDateAsync(user, lockoutEnd);
+
+            if (user == null) { return NotFound(); }
+
+
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Unblock(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) { return NotFound(); }
+
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            if (user == null) { return NotFound(); }
+
+            await _userManager.SetLockoutEndDateAsync(user, null);
 
             return RedirectToAction("Index");
         }

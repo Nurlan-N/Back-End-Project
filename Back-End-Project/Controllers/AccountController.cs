@@ -68,11 +68,17 @@ namespace Back_End_Project.Controllers
                 return View(loginVM);
             }
             Microsoft.AspNetCore.Identity.SignInResult signInResult = await _signInManager.PasswordSignInAsync(appUser, loginVM.Password, loginVM.RememberMe, true);
+            if (signInResult.IsLockedOut) 
+            {
+                ModelState.AddModelError("", "Siz Blok olunmusuz");
+                return View(loginVM);
+            }
             if (!signInResult.Succeeded)
             {
                 ModelState.AddModelError("", "Email veya Password Yalnisdir");
                 return View(loginVM);
             }
+            appUser.LastOnline = DateTime.UtcNow.AddHours(4);
 
             return RedirectToAction("index", "Home");
         }
@@ -81,7 +87,12 @@ namespace Back_End_Project.Controllers
         {
             await _signInManager.SignOutAsync();
 
-            return RedirectToAction("login");
+            return RedirectToAction("index", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> MyAccount()
+        {
+            return View();
         }
     }
 }
