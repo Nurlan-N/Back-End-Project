@@ -18,6 +18,7 @@ namespace Back_End_Project.Controllers
 
         public async Task<IActionResult> Index(int? categoryId, int sort, int pageIndex = 1)
         {
+
             IQueryable<Product> productList = _context.Products.Where(p => p.IsDeleted == false); //  Productlar
 
             if (sort == 1) // A-Z
@@ -67,6 +68,18 @@ namespace Back_End_Project.Controllers
                 : p.Price >= minValue && p.Price <= (maxValue == 0 ? 400 : maxValue))).ToListAsync();
 
             return PartialView("_ShopListPartial", product);
+        }
+        public async Task<IActionResult> Detail(int id)
+        {
+            if (id == null) return BadRequest();
+
+            Product product = await _context.Products
+                .Include(p => p.ProductImages.Where(pImages => pImages.IsDeleted == false))
+                .FirstOrDefaultAsync(c => c.Id == id && c.IsDeleted == false);
+
+            if (product == null) return NotFound();
+
+            return View(product);
         }
     }
 }
