@@ -52,12 +52,15 @@
                         <span><strong>$370.00</strong></span>
                     </li>
                 </ul>
-            </div>
+            </div>           
+                @if (Model != null && Model.Count() > 0)
+                {
+                    <div class="minicart-button">
+                        <a href="cart.html"><i class="fa fa-shopping-cart"></i> view cart</a>
+                    <a asp-action="checkout" asp-controller="shop"><i class="fa fa-share"></i> checkout</a>
+                    </div>
 
-            <div class="minicart-button">
-                <a href="cart.html"><i class="fa fa-shopping-cart"></i> view cart</a>
-                <a href="cart.html"><i class="fa fa-share"></i> checkout</a>
-            </div>
+                }
         </div>
     </div>
 </div>

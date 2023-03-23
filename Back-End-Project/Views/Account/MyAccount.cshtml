@@ -1,8 +1,8 @@
-﻿ @model ProfileVM
+﻿@model ProfileVM
 
 @{
     ViewData["Title"] = "MyAccount";
-  
+
 }
 
 <!-- breadcrumb area start -->
@@ -35,18 +35,18 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-4">
                             <div class="myaccount-tab-menu nav" role="tablist">
-                                <a href="#dashboad" class="active" data-toggle="tab">
+                                <a href="#dashboad" class="@(TempData["Tab"] == null ? "active" : "")" data-toggle="tab">
                                     <i class="fa fa-dashboard"></i>
                                     Dashboard
                                 </a>
-                                <a href="#orders" data-toggle="tab"><i class="fa fa-cart-arrow-down"></i> Orders</a>
-                                <a href="#download" data-toggle="tab"><i class="fa fa-cloud-download"></i> Download</a>
-                                <a href="#payment-method" data-toggle="tab">
+                                <a class="@(TempData["Tab"]?.ToString() == "orders" ? "active" : "")" href="#orders" data-toggle="tab"><i class="fa fa-cart-arrow-down"></i> Orders</a>
+                                <a class="@(TempData["Tab"]?.ToString() == "download" ? "active" : "")" href="#download" data-toggle="tab"><i class="fa fa-cloud-download"></i> Download</a>
+                                <a class="@(TempData["Tab"]?.ToString() == "payment" ? "active" : "")" href="#payment-method" data-toggle="tab">
                                     <i class="fa fa-credit-card"></i> Payment
                                     Method
                                 </a>
-                                <a href="#address-edit" data-toggle="tab"><i class="fa fa-map-marker"></i> address</a>
-                                <a href="#account-info" data-toggle="tab"><i class="fa fa-user"></i> Account Details</a>
+                                <a class="@(TempData["Tab"]?.ToString() == "address" ? "active" : "")" href="#address-edit" data-toggle="tab"><i class="fa fa-map-marker"></i> address</a>
+                                <a class="@(TempData["Tab"]?.ToString() == "account" ? "active" : "")" href="#account-info" data-toggle="tab"><i class="fa fa-user"></i> Account Details</a>
                                 <a asp-controller="account" asp-action="logout"><i class="fa fa-sign-out"></i> Logout</a>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                         <div class="col-lg-9 col-md-8">
                             <div class="tab-content" id="myaccountContent">
                                 <!-- Single Tab Content Start -->
-                                <div class="tab-pane fade show active" id="dashboad" role="tabpanel">
+                                <div class="tab-pane fade@(TempData["Tab"] == null ? "show active" : "") " id="dashboad" role="tabpanel">
                                     <div class="myaccount-content">
                                         <h3>Dashboard</h3>
                                         <div class="welcome">
@@ -66,7 +66,7 @@
                                 </div>
                                 <!-- Single Tab Content End -->
                                 <!-- Single Tab Content Start -->
-                                <div class="tab-pane fade" id="orders" role="tabpanel">
+                                <div class="tab-pane fade @(TempData["Tab"]?.ToString() == "orders" ? "show active" : "")" id="orders" role="tabpanel">
                                     <div class="myaccount-content">
                                         <h3>Orders</h3>
                                         <div class="myaccount-table table-responsive text-center">
@@ -109,7 +109,7 @@
                                 </div>
                                 <!-- Single Tab Content End -->
                                 <!-- Single Tab Content Start -->
-                                <div class="tab-pane fade" id="download" role="tabpanel">
+                                <div class="tab-pane fade @(TempData["Tab"]?.ToString() == "downloads" ? "show active" : "")" id="download" role="tabpanel">
                                     <div class="myaccount-content">
                                         <h3>Downloads</h3>
                                         <div class="myaccount-table table-responsive text-center">
@@ -142,7 +142,7 @@
                                 </div>
                                 <!-- Single Tab Content End -->
                                 <!-- Single Tab Content Start -->
-                                <div class="tab-pane fade" id="payment-method" role="tabpanel">
+                                <div class="tab-pane fade @(TempData["Tab"]?.ToString() == "payment" ? "show active" : "")" id="payment-method" role="tabpanel">
                                     <div class="myaccount-content">
                                         <h3>Payment Method</h3>
                                         <p class="saved-message">You Can't Saved Your Payment Method yet.</p>
@@ -150,27 +150,39 @@
                                 </div>
                                 <!-- Single Tab Content End -->
                                 <!-- Single Tab Content Start -->
-                                <div class="tab-pane fade" id="address-edit" role="tabpanel">
-                                    <div class="myaccount-content">
-                                        <h3>Billing Address</h3>
-                                        <address>
-                                            <p><strong>Alex Tuntuni</strong></p>
-                                            <p>
-                                                1355 Market St, Suite 900 <br>
-                                                San Francisco, CA 94103
-                                            </p>
-                                            <p>Mobile: (123) 456-7890</p>
-                                        </address>
-                                        <a href="#" class="check-btn sqr-btn "><i class="fa fa-edit"></i> Edit Address</a>
+                                <div class="tab-pane fade @(TempData["Tab"]?.ToString() == "address" ? "show active" : "")" id="address-edit" role="tabpanel">
+                                    <div class="addressForm d-none">
+                                        @await Html.PartialAsync("_AddressFormPartial",new Address())
                                     </div>
+                                    <div class="myaccount-content addressContainer">
+                                        <a href="#" class="check-btn sqr-btn addAddress"><i class="fa fa-edit"></i> Add Address</a>
+                                        @if (Model.Addresses != null && Model.Addresses.Count() > 0)
+                                        {
+                                            foreach (Address address in Model.Addresses)
+                                            {
+                                                <h3>@address.Country </h3>
+                                                <address>
+                                                    <p><strong>@($"{Model.Name} {Model.SurName}")</strong></p>
+                                                    <p>
+                                                        @address.City, @address.State <br>
+                                                       , @address.PostalCode
+                                                    </p>
+                                                    <p>Mobile: @address.Phone</p>
+                                                    <p>IsMain:<span class="text @(address.IsMain ? "text-success" : "text-danger")"> @address.IsMain</span></p>
+                                                </address>
+                                                <a asp-action="editAddress" asp-controller="account" asp-route-id="@address.Id" class="check-btn sqr-btn "><i class="fa fa-edit"></i> Edit Address</a>
+                                            }
+                                        }
+
+                                    </div>                              <!-- Single Tab Content Start -->
                                 </div>
                                 <!-- Single Tab Content End -->
                                 <!-- Single Tab Content Start -->
-                                <div class="tab-pane fade" id="account-info" role="tabpanel">
+                                <div class="tab-pane fade @(TempData["Tab"]?.ToString() == "account" ? "show active" : "")" id="account-info" role="tabpanel">
                                     <div class="myaccount-content">
                                         <h3>Account Details</h3>
                                         <div class="account-details-form">
-                                            <form method="post" >
+                                            <form method="post">
                                                 <div class="row">
                                                     <div asp-validation-summary="ModelOnly" class="text text-danger"></div>
                                                     <div class="col-lg-6">
@@ -238,4 +250,3 @@
     </div>
 </div>
 <!-- my account wrapper end -->
-

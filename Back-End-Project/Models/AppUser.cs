@@ -10,6 +10,9 @@ namespace Back_End_Project.Models
         [StringLength(20)]
         public string? SurName { get; set; }
         public Nullable<DateTime> LastOnline { get; set; }
+        public IEnumerable<Address>? Addresses { get; set; }
+        public IEnumerable<Order>? Orders { get; set; }
+        public IEnumerable<Basket>? Baskets { get; set; }
 
     }
 }

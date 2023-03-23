@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Security.Principal;
+using Microsoft.EntityFrameworkCore;
 
 namespace Back_End_Project.Controllers
 {
@@ -101,13 +102,16 @@ namespace Back_End_Project.Controllers
         [Authorize]
         public async Task<IActionResult> MyAccount()
         {
-            AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            AppUser appUser = await _userManager.Users.Include(u => u.Addresses.Where(a => a.IsDeleted == false))
+                .FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
             ProfileVM profileVM = new()
             {
                 Name = appUser.Name,
                 SurName = appUser.SurName,
                 Email = appUser.Email,
                 UserName = appUser.UserName,
+                Addresses = appUser.Addresses
+
             };
             return View(profileVM);
         }
@@ -140,12 +144,14 @@ namespace Back_End_Project.Controllers
             {
                 if(await _userManager.CheckPasswordAsync(appUser, profileVM.OldPassword)) 
                 { 
-                    ModelState.AddModelError("OldPassword", "Old Password Yalnishdi"); 
+                    ModelState.AddModelError("OldPassword", "Old Password Yalnishdi");
+                    TempData["Tab"] = "account";
                     return View(profileVM);
                 }
                 if (profileVM.OldPassword == profileVM.Password)
                 {
                     ModelState.AddModelError("Password", "Yeni Şifrə Köhnə ilə eyni ola bilməz");
+                    TempData["Tab"] = "account";
                     return View(profileVM);
                 }
 
@@ -156,13 +162,43 @@ namespace Back_End_Project.Controllers
                     foreach (IdentityError error in result.Errors)
                     {
                         ModelState.AddModelError("", error.Description);
+
                     }
+                    TempData["Tab"] = "account";
                     return View(profileVM);
 
                 }
             }
 
             return Redirect("/");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddAddress(Address address)
+        {
+            AppUser appUser = await _userManager.Users.Include(u => u.Addresses.Where(a => a.IsDeleted == false))
+                .FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
+
+            ProfileVM profileVM = new ProfileVM
+            {
+                Addresses = appUser.Addresses
+            };
+
+            if (!ModelState.IsValid) return View(nameof(MyAccount), profileVM);
+            if (address.IsMain && appUser.Addresses != null && appUser.Addresses.Count() > 0 && appUser.Addresses.Any(u => u.IsMain))
+            {
+                appUser.Addresses.FirstOrDefault(a => a.IsMain).IsMain = false;
+            }
+            address.UserId = appUser.Id;
+            address.CreatedBy = $"{appUser.Name} {appUser.SurName}";
+            address.CreatedAt = DateTime.UtcNow.AddHours(4);
+
+            await _context.Addresses.AddAsync(address);
+            await _context.SaveChangesAsync();
+
+            TempData["Tab"] = "address";
+
+            return RedirectToAction(nameof(MyAccount));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Back_End_Project.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Back_End_Project.ViewModels.AccountViewModels
 {
@@ -24,5 +25,6 @@ namespace Back_End_Project.ViewModels.AccountViewModels
         [DataType(DataType.Password)]
         [Compare("Password")]
         public string? ConfirimPassword { get; set; }
+        public IEnumerable<Address>? Addresses { get; set; }
     }
 }

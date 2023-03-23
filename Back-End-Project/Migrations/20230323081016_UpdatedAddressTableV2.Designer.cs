@@ -4,6 +4,7 @@ using Back_End_Project.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Back_End_Project.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230323081016_UpdatedAddressTableV2")]
+    partial class UpdatedAddressTableV2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,56 +162,6 @@ namespace Back_End_Project.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Back_End_Project.Models.Basket", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatetAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatetBy")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Baskets");
                 });
 
             modelBuilder.Entity("Back_End_Project.Models.Blog", b =>
@@ -790,21 +742,6 @@ namespace Back_End_Project.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Back_End_Project.Models.Basket", b =>
-                {
-                    b.HasOne("Back_End_Project.Models.Product", "Product")
-                        .WithMany("Baskets")
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("Back_End_Project.Models.AppUser", "User")
-                        .WithMany("Baskets")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Back_End_Project.Models.Order", b =>
                 {
                     b.HasOne("Back_End_Project.Models.AppUser", "User")
@@ -908,8 +845,6 @@ namespace Back_End_Project.Migrations
                 {
                     b.Navigation("Addresses");
 
-                    b.Navigation("Baskets");
-
                     b.Navigation("Orders");
                 });
 
@@ -925,8 +860,6 @@ namespace Back_End_Project.Migrations
 
             modelBuilder.Entity("Back_End_Project.Models.Product", b =>
                 {
-                    b.Navigation("Baskets");
-
                     b.Navigation("ProductImages");
                 });
 #pragma warning restore 612, 618
