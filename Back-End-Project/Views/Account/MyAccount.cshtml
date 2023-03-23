@@ -1,13 +1,8 @@
-﻿@inject UserManager<AppUser> userManager
+﻿ @model ProfileVM
 
 @{
     ViewData["Title"] = "MyAccount";
-    AppUser appUser = new AppUser();
-
-    if (User?.Identity?.Name != null)
-    {
-        appUser = await userManager.FindByNameAsync(User.Identity.Name);
-    }
+  
 }
 
 <!-- breadcrumb area start -->
@@ -64,7 +59,7 @@
                                     <div class="myaccount-content">
                                         <h3>Dashboard</h3>
                                         <div class="welcome">
-                                            <p>Hello, <strong>@(appUser != null ? $"{appUser.Name} {appUser.SurName}" : "")</strong> (If Not <strong>@(appUser != null ? $"{appUser.Name} {appUser.SurName}" : "")!</strong><a asp-controller="account" asp-action="logout" class="logout"> Logout</a>)</p>
+                                            <p>Hello, <strong>@(Model != null ? $"{Model.Name} {Model.SurName}" : "")</strong> (If Not <strong>@(Model != null ? $"{Model.Name} {Model.SurName}" : "")!</strong><a asp-controller="account" asp-action="logout" class="logout"> Logout</a>)</p>
                                         </div>
                                         <p class="mb-0">From your account dashboard. you can easily check & view your recent orders, manage your shipping and billing addresses and edit your password and account details.</p>
                                     </div>
@@ -175,52 +170,60 @@
                                     <div class="myaccount-content">
                                         <h3>Account Details</h3>
                                         <div class="account-details-form">
-                                            <form action="#">
+                                            <form method="post" >
                                                 <div class="row">
+                                                    <div asp-validation-summary="ModelOnly" class="text text-danger"></div>
                                                     <div class="col-lg-6">
                                                         <div class="single-input-item">
-                                                            <label for="first-name" class="required">First Name</label>
-                                                            <input type="text" id="first-name" placeholder="First Name" />
+                                                            <label asp-for=Name for="first-name" class="required">First Name</label>
+                                                            <input asp-for=Name type="text" id="first-name" placeholder="First Name" />
+                                                            <span asp-validation-for=Name class="text text-danger"></span>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="single-input-item">
-                                                            <label for="last-name" class="required">Last Name</label>
-                                                            <input type="text" id="last-name" placeholder="Last Name" />
+                                                            <label asp-for=SurName for="last-name" class="required">Last Name</label>
+                                                            <input asp-for=SurName type="text" id="last-name" placeholder="Last Name" />
+                                                            <span asp-validation-for=SurName class="text text-danger"></span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="single-input-item">
-                                                    <label for="display-name" class="required">Display Name</label>
-                                                    <input type="text" id="display-name" placeholder="Display Name" />
+                                                    <label asp-for=UserName for="display-name" class="required">Display Name</label>
+                                                    <input asp-for=UserName type="text" id="display-name" placeholder="Display Name" />
                                                 </div>
                                                 <div class="single-input-item">
-                                                    <label for="email" class="required">Email Addres</label>
-                                                    <input type="email" id="email" placeholder="Email Address" />
+                                                    <label asp-for=Email for="email" class="required">Email Addres</label>
+                                                    <input asp-for="Email" type="email" id="email" placeholder="Email Address" />
+                                                    <span asp-validation-for=Email class="text text-danger"></span>
                                                 </div>
                                                 <fieldset>
                                                     <legend>Password change</legend>
                                                     <div class="single-input-item">
-                                                        <label for="current-pwd" class="required">Current Password</label>
-                                                        <input type="password" id="current-pwd" placeholder="Current Password" />
+                                                        <label asp-for=OldPassword for="current-pwd" class="required">Current Password</label>
+                                                        <input asp-for=OldPassword type="password" id="current-pwd" placeholder="Current Password" />
+                                                        <span asp-validation-for=OldPassword class="text text-danger"></span>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="single-input-item">
-                                                                <label for="new-pwd" class="required">New Password</label>
-                                                                <input type="password" id="new-pwd" placeholder="New Password" />
+                                                                <label asp-for=Password for="new-pwd" class="required">New Password</label>
+                                                                <input asp-for=Password type="password" id="new-pwd" placeholder="New Password" />
+                                                                <span asp-validation-for=Password class="text text-danger"></span>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
                                                             <div class="single-input-item">
-                                                                <label for="confirm-pwd" class="required">Confirm Password</label>
-                                                                <input type="password" id="confirm-pwd" placeholder="Confirm Password" />
+                                                                <label asp-for=ConfirimPassword for="confirm-pwd" class="required">Confirm Password</label>
+                                                                <input asp-for=ConfirimPassword type="password" id="confirm-pwd" placeholder="Confirm Password" />
+                                                                <span asp-validation-for=ConfirimPassword class="text text-danger"></span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </fieldset>
                                                 <div class="single-input-item">
-                                                    <button class="check-btn sqr-btn ">Save Changes</button>
+                                                    <button type="submit" class="check-btn sqr-btn ">Save Changes</button>
                                                 </div>
                                             </form>
                                         </div>

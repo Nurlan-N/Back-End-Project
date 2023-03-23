@@ -24,7 +24,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
         public async Task<IActionResult> Index(int pageIndex = 1)
         {
             List<AppUser> onlineUsers = await _context.Users
-                 .Where(u => u.LastOnline.HasValue && u.LastOnline.Value.AddMinutes(5) >= DateTime.UtcNow)
+                 .Where(u => u.LastOnline.HasValue && u.LastOnline.Value.AddMinutes(1) >= DateTime.UtcNow)
                  .ToListAsync();
 
             return View(PageNatedList<AppUser>.Create(onlineUsers.AsQueryable(), pageIndex, 3));

@@ -10,5 +10,6 @@ namespace Back_End_Project.Models
         [StringLength(20)]
         public string? SurName { get; set; }
         public Nullable<DateTime> LastOnline { get; set; }
+
     }
 }

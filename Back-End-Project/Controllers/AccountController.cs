@@ -1,8 +1,12 @@
 ﻿using Back_End_Project.DataAccessLayer;
 using Back_End_Project.Models;
 using Back_End_Project.ViewModels.AccountViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Security.Principal;
 
 namespace Back_End_Project.Controllers
 {
@@ -13,7 +17,7 @@ namespace Back_End_Project.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> userManager,AppDbContext context,
+        public AccountController(UserManager<AppUser> userManager, AppDbContext context,
             RoleManager<IdentityRole> roleManager,
             SignInManager<AppUser> signInManager)
         {
@@ -24,7 +28,7 @@ namespace Back_End_Project.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register() 
+        public IActionResult Register()
         {
             return View();
         }
@@ -71,7 +75,7 @@ namespace Back_End_Project.Controllers
                 return View(loginVM);
             }
             Microsoft.AspNetCore.Identity.SignInResult signInResult = await _signInManager.PasswordSignInAsync(appUser, loginVM.Password, loginVM.RememberMe, true);
-            if (signInResult.IsLockedOut) 
+            if (signInResult.IsLockedOut)
             {
                 ModelState.AddModelError("", "Siz Blok olunmusuz");
                 return View(loginVM);
@@ -82,7 +86,7 @@ namespace Back_End_Project.Controllers
                 return View(loginVM);
             }
             appUser.LastOnline = DateTime.UtcNow.AddHours(4);
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction("index", "Home");
         }
@@ -94,9 +98,71 @@ namespace Back_End_Project.Controllers
             return RedirectToAction("index", "Home");
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> MyAccount()
         {
-            return View();
+            AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            ProfileVM profileVM = new()
+            {
+                Name = appUser.Name,
+                SurName = appUser.SurName,
+                Email = appUser.Email,
+                UserName = appUser.UserName,
+            };
+            return View(profileVM);
+        }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MyAccount(ProfileVM profileVM)
+        {
+            if (!ModelState.IsValid) return View(profileVM);
+
+            AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            appUser.Name = profileVM.Name;
+            appUser.SurName = profileVM.SurName;
+            if (appUser.NormalizedEmail != profileVM.Email.Trim().ToUpperInvariant()) {appUser.Email = profileVM.Email; }
+            if (appUser.NormalizedUserName != profileVM.UserName.Trim().ToUpperInvariant()) { appUser.UserName = profileVM.UserName; }
+
+            IdentityResult result = await _userManager.UpdateAsync(appUser);
+            if (!result.Succeeded)
+            {
+                foreach (IdentityError error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return View(profileVM);
+
+            }
+            await _signInManager.SignInAsync(appUser, true);
+
+            if(!string.IsNullOrWhiteSpace(profileVM.OldPassword)) 
+            {
+                if(await _userManager.CheckPasswordAsync(appUser, profileVM.OldPassword)) 
+                { 
+                    ModelState.AddModelError("OldPassword", "Old Password Yalnishdi"); 
+                    return View(profileVM);
+                }
+                if (profileVM.OldPassword == profileVM.Password)
+                {
+                    ModelState.AddModelError("Password", "Yeni Şifrə Köhnə ilə eyni ola bilməz");
+                    return View(profileVM);
+                }
+
+                string token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+                result =  await _userManager.ResetPasswordAsync(appUser,token,profileVM.Password);
+                if (!result.Succeeded)
+                {
+                    foreach (IdentityError error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return View(profileVM);
+
+                }
+            }
+
+            return Redirect("/");
         }
     }
 }

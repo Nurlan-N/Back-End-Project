@@ -1,12 +1,15 @@
-﻿using Back_End_Project.Areas.Manage.ViewModels.UserVMs;
+﻿using Back_End_Project.Areas.Manage.ViewModels.AccountVMs;
+using Back_End_Project.Areas.Manage.ViewModels.UserVMs;
 using Back_End_Project.DataAccessLayer;
 using Back_End_Project.Models;
 using Back_End_Project.ViewModels;
+using Back_End_Project.ViewModels.AccountViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using RegisterVM = Back_End_Project.Areas.Manage.ViewModels.AccountVMs.RegisterVM;
 
 namespace Back_End_Project.Areas.Manage.Controllers
 {
@@ -42,12 +45,47 @@ namespace Back_End_Project.Areas.Manage.Controllers
 
             foreach (var item in query)
             {
-                string roleId = _context.UserRoles.FirstOrDefault(u => u.UserId == item.Id).RoleId;
-                string roleName = _context.Roles.FirstOrDefault(r => r.Id == roleId).Name;
+                var userRole = _context.UserRoles.FirstOrDefault(u => u.UserId == item.Id);
+                string roleId = userRole != null ? userRole.RoleId : null;
+                var role = _context.Roles.FirstOrDefault(r => r.Id == roleId);
+                string roleName = role != null ? role.Name : null;
 
                 item.RoleName = roleName;
             }
-            return View(PageNatedList<UserVM>.Create(query.AsQueryable(), pageIndex, 3));
+            return View(PageNatedList<UserVM>.Create(query.AsQueryable(), pageIndex, 5));
+        }
+        [HttpGet]
+        public async Task<IActionResult> Create( )
+        {
+            ViewBag.Role = await _roleManager.Roles.Where(c => c.Name != "SuperAdmin").ToListAsync();
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(RegisterVM registerVM)
+        {
+            if (!ModelState.IsValid) { return View(); }
+            AppUser appUser = new AppUser
+            {
+                Name = registerVM.Name,
+                Email = registerVM.Email,
+                SurName = registerVM.SurName,
+                UserName = registerVM.UserName,
+                
+            };
+            IdentityResult identityResult = await _userManager.CreateAsync(appUser, registerVM.Password);
+            if (!identityResult.Succeeded)
+            {
+                foreach (IdentityError identityError in identityResult.Errors)
+                {
+                    ModelState.AddModelError("", identityError.Description);
+                }
+                return View(registerVM);
+            }
+            string roleId = _roleManager.Roles.FirstOrDefault(c => c.Name != "SuperAdmin" && c.Id == registerVM.RoleId).Name;
+
+            await _userManager.AddToRoleAsync(appUser, roleId);
+
+            return RedirectToAction("Index");
         }
         [HttpGet]
         public async Task<IActionResult> ChangeRole(string? id)

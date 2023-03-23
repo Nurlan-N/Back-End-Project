@@ -10,7 +10,7 @@
         <h1 class="h3 mb-4 text-gray-800">User Page</h1>
     </div>
     <div class="col-lg-2">
-        <a class="btn btn-primary mb-4" asp-action="index" asp-controller="user" asp-area="manage">Create</a>
+        <a class="btn btn-primary mb-4" asp-action="create" asp-controller="user" asp-area="manage">Create</a>
     </div>
 </div>
 <div class="row">
@@ -44,7 +44,6 @@
                         <td>@userVM.LockoutEnd</td>
 
                         <td>
-                            <a asp-action="detail" asp-area="manage" asp-controller="user" asp-route-id="@userVM.Id" class="btn btn-primary">Detail</a>
                             <a asp-action="ChangeRole" asp-area="manage" asp-controller="user" asp-route-id="@userVM.Id" class="btn btn-warning">ChangeRole</a>
                             <a asp-action="block" asp-area="manage" asp-controller="user" asp-route-id="@userVM.Id" class="btn btn-danger">Block</a>
                             <a asp-action="Unblock" asp-area="manage" asp-controller="user" asp-route-userId="@userVM.Id" class="btn btn-warning">Unblock</a>
