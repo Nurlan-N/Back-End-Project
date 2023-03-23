@@ -1,0 +1,28 @@
+﻿@inject ILayoutService layoutservices
+@{
+    IEnumerable<WishlistVM> wishlistVMs = await layoutservices.GetWishlist();
+}
+
+<!-- breadcrumb area start -->
+<div class="breadcrumb-area bg-img" data-bg="assets/img/banner/breadcrumb-banner.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-wrap text-center">
+                    <nav aria-label="breadcrumb">
+                        <h1 class="breadcrumb-title">Wishlist</h1>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- breadcrumb area end -->
+<!-- wishlist main wrapper start -->
+@await Html.PartialAsync("_WishlistPartial", wishlistVMs)
+
+<!-- wishlist main wrapper end -->

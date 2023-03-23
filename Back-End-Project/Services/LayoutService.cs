@@ -2,6 +2,7 @@
 using Back_End_Project.Interfaces;
 using Back_End_Project.Models;
 using Back_End_Project.ViewModels.BasketViewModels;
+using Back_End_Project.ViewModels.WishlistViewModels;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -49,6 +50,36 @@ namespace Back_End_Project.Services
 
             return basketVMs;
         }
+        public async Task<IEnumerable<WishlistVM>> GetWishlist()
+        {
+            string wishlist = _httpContextAccessor.HttpContext.Request.Cookies["wishlist"];
+
+            List<WishlistVM> wishlistVMs = null;
+            if (!string.IsNullOrWhiteSpace(wishlist))
+            {
+                wishlistVMs = JsonConvert.DeserializeObject<List<WishlistVM>>(wishlist);
+
+                foreach (WishlistVM wishlistVM in wishlistVMs)
+                {
+                    Product product = await _appDbContext.Products
+                        .FirstOrDefaultAsync(p => p.Id == wishlistVM.Id && p.IsDeleted == false);
+
+                    if (product != null)
+                    {
+                        wishlistVM.Price = product.DiscountedPrice > 0 ? product.DiscountedPrice : product.Price;
+                        wishlistVM.Title = product.Title;
+                        wishlistVM.Image = product.Image;
+                    }
+
+                }
+            }
+            else
+            {
+                wishlistVMs = new List<WishlistVM>();
+            }
+
+            return wishlistVMs;
+        }
         public async Task<IDictionary<string, string>> GetSettings()
         {
             IDictionary<string, string> settings = await _appDbContext.Settings.ToDictionaryAsync(s => s.Key, s => s.Value);
@@ -56,5 +87,6 @@ namespace Back_End_Project.Services
             return settings;
         }
 
+        
     }
 }

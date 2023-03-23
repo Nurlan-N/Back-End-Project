@@ -1,0 +1,46 @@
+﻿@model IEnumerable<WishlistVM>
+
+<div class="wishlist-main-wrapper section-padding">
+    <div class="container custom-container">
+        <!-- Wishlist Page Content Start -->
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Wishlist Table Area -->
+                <div class="cart-table table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="pro-thumbnail">Thumbnail</th>
+                                <th class="pro-title">Product</th>
+                                <th class="pro-price">Price</th>
+                                <th class="pro-subtotal">Add to Cart</th>
+                                <th class="pro-remove">Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                @foreach (WishlistVM wishlist in Model)
+                                {
+                                    <tr>
+                                        <td class="pro-thumbnail">
+                                            <a href="#">
+                                                <img class="img-fluid" src="assets/img/product/@wishlist.Image"
+                                                     alt="Product" />
+                                            </a>
+                                        </td>
+                                        <td class="pro-title"><a href="#">@wishlist.Title</a></td>
+                                        <td class="pro-price"><span>$@wishlist.Price.00</span></td>
+                                        <td class="pro-subtotal"><a href="cart.html" class="sqr-btn text-white">Add to Cart</a></td>
+                                        <td class="pro-remove deleteWishlist" data-id="@wishlist.Id"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Wishlist Page Content End -->
+    </div>
+</div>

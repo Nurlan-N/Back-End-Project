@@ -13,6 +13,8 @@
 }
 @{
     IEnumerable<BasketVM> basketVMs = await layoutservices.GetBaskets();
+    IEnumerable<WishlistVM> wishlistVMs = await layoutservices.GetWishlist();
+
 
 }
 
@@ -121,6 +123,12 @@
                                             }
                                             
                                         </ul>
+                                    </li>
+                                    <li>
+                                        <a asp-action="index" asp-controller="wishlist">
+                                            <i class="fa-regular fa-heart"></i>
+                                            <div class="notification">@(wishlistVMs.Count() > 0 ? wishlistVMs.Count() : "0")</div>
+                                        </a>
                                     </li>
                                     <li>
                                         <a href="#" class="minicart-btn">

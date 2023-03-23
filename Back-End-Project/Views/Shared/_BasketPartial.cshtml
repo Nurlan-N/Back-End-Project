@@ -40,16 +40,12 @@
                         <span><strong>$@Model.Sum(b => b.Price)</strong></span>
                     </li>
                     <li>
-                        <span>Eco Tax (-2.00)</span>
-                        <span><strong>$10.00</strong></span>
-                    </li>
-                    <li>
-                        <span>VAT (20%)</span>
-                        <span><strong>$60.00</strong></span>
+                        <span>Eco Tax </span>
+                        <span><strong>$@Model.Sum(p => p.ExTax).00</strong></span>
                     </li>
                     <li class="total">
                         <span>total</span>
-                        <span><strong>$370.00</strong></span>
+                        <span><strong>$@(Model.Sum(p => p.Price) - Model.Sum(p => p.ExTax)) .00</strong></span>
                     </li>
                 </ul>
             </div>           

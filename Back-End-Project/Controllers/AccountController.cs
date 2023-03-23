@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Security.Principal;
 using Microsoft.EntityFrameworkCore;
+using Back_End_Project.ViewModels.BasketViewModels;
+using Newtonsoft.Json;
+using Back_End_Project.ViewModels.WishlistViewModels;
 
 namespace Back_End_Project.Controllers
 {
@@ -69,7 +72,9 @@ namespace Back_End_Project.Controllers
         {
             if (!ModelState.IsValid) { return View(loginVM); }
 
-            AppUser appUser = await _userManager.FindByEmailAsync(loginVM.Email);
+            AppUser appUser = await _userManager.Users.Include(u => u.Baskets.Where(b => b.IsDeleted == false))
+                .FirstOrDefaultAsync(u => u.NormalizedEmail == loginVM.Email.Trim().ToUpperInvariant());
+
             if (appUser == null)
             {
                 ModelState.AddModelError("", "Email veya Password Yalnisdir");
@@ -86,6 +91,64 @@ namespace Back_End_Project.Controllers
                 ModelState.AddModelError("", "Email veya Password Yalnisdir");
                 return View(loginVM);
             }
+
+            string basket = HttpContext.Request.Cookies["basket"];
+
+            if (string.IsNullOrWhiteSpace(basket))
+            {
+                if (appUser.Baskets != null && appUser.Baskets.Count() > 0)
+                {
+                    List<BasketVM> basketVMs = new List<BasketVM>();
+
+                    foreach (Basket basket1 in appUser.Baskets)
+                    {
+                        BasketVM basketVM = new()
+                        {
+                            Id = (int)basket1.ProductId,
+                            Count = basket1.Count,
+                        };
+                        basketVMs.Add(basketVM);
+                    }
+
+                    basket = JsonConvert.SerializeObject(basketVMs);
+
+                    HttpContext.Response.Cookies.Append("basket", basket);
+                }
+            }
+            else
+            {
+                HttpContext.Response.Cookies.Append("basket", "");
+
+            }
+            string wishlist = HttpContext.Request.Cookies["wishlist"];
+
+            if (string.IsNullOrWhiteSpace(wishlist))
+            {
+                if (appUser.Wishlist != null && appUser.Wishlist.Count() > 0)
+                {
+                    List<WishlistVM> wishlistVMs = new List<WishlistVM>();
+
+                    foreach (Wishlist wishlist1 in appUser.Wishlist)
+                    {
+                        WishlistVM wishlistVM = new()
+                        {
+                            Id = (int)wishlist1.ProductId,
+                            Count = wishlist1.Count,
+                        };
+                        wishlistVMs.Add(wishlistVM);
+                    }
+
+                    wishlist = JsonConvert.SerializeObject(wishlistVMs);
+
+                    HttpContext.Response.Cookies.Append("wishlist", wishlist);
+                }
+            }
+            else
+            {
+                HttpContext.Response.Cookies.Append("basket", "");
+
+            }
+
             appUser.LastOnline = DateTime.UtcNow.AddHours(4);
 
             await _context.SaveChangesAsync();
@@ -125,7 +188,7 @@ namespace Back_End_Project.Controllers
             AppUser appUser = await _userManager.FindByNameAsync(User.Identity.Name);
             appUser.Name = profileVM.Name;
             appUser.SurName = profileVM.SurName;
-            if (appUser.NormalizedEmail != profileVM.Email.Trim().ToUpperInvariant()) {appUser.Email = profileVM.Email; }
+            if (appUser.NormalizedEmail != profileVM.Email.Trim().ToUpperInvariant()) { appUser.Email = profileVM.Email; }
             if (appUser.NormalizedUserName != profileVM.UserName.Trim().ToUpperInvariant()) { appUser.UserName = profileVM.UserName; }
 
             IdentityResult result = await _userManager.UpdateAsync(appUser);
@@ -140,10 +203,10 @@ namespace Back_End_Project.Controllers
             }
             await _signInManager.SignInAsync(appUser, true);
 
-            if(!string.IsNullOrWhiteSpace(profileVM.OldPassword)) 
+            if (!string.IsNullOrWhiteSpace(profileVM.OldPassword))
             {
-                if(await _userManager.CheckPasswordAsync(appUser, profileVM.OldPassword)) 
-                { 
+                if (await _userManager.CheckPasswordAsync(appUser, profileVM.OldPassword))
+                {
                     ModelState.AddModelError("OldPassword", "Old Password Yalnishdi");
                     TempData["Tab"] = "account";
                     return View(profileVM);
@@ -156,7 +219,7 @@ namespace Back_End_Project.Controllers
                 }
 
                 string token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
-                result =  await _userManager.ResetPasswordAsync(appUser,token,profileVM.Password);
+                result = await _userManager.ResetPasswordAsync(appUser, token, profileVM.Password);
                 if (!result.Succeeded)
                 {
                     foreach (IdentityError error in result.Errors)

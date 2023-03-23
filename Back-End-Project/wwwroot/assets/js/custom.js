@@ -1,4 +1,26 @@
 ﻿$(document).ready(function () {
+    $(document).on('click', '.deleteWishlist', function (e) {
+        e.preventDefault();
+
+        const removeId = $(this).attr('data-id');
+        fetch('wishlist/DeleteWishlist?id=' + removeId)
+            .then(res => {
+                return res.text();
+            })
+        window.location.reload();
+
+
+    })
+    $('.addToWishlist').click(function myFunction(e) {
+        e.preventDefault();
+
+        let productId = $(this).data('id');
+        fetch('Wishlist/AddWishlist?id=' + productId)
+            .then(res => {
+                return res.text();
+            })
+
+    })
     $(document).on('click', '.addAddress', function (e) {
         e.preventDefault();
 

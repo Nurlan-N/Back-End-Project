@@ -12,7 +12,8 @@ namespace Back_End_Project.Models
         public Nullable<DateTime> LastOnline { get; set; }
         public IEnumerable<Address>? Addresses { get; set; }
         public IEnumerable<Order>? Orders { get; set; }
-        public IEnumerable<Basket>? Baskets { get; set; }
+        public List<Basket>? Baskets { get; set; }
+        public List<Wishlist>? Wishlist { get; set;}
 
     }
 }
