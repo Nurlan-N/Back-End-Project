@@ -81,5 +81,9 @@ namespace Back_End_Project.Controllers
 
             return View(product);
         }
+        public async Task<IActionResult> Checkout()
+        {
+            return View();
+        }
     }
 }

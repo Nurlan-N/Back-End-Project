@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using NuGet.ContentModel;
 
 namespace Back_End_Project.Controllers
 {
@@ -18,10 +19,100 @@ namespace Back_End_Project.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            string basket = HttpContext.Request.Cookies["basket"];
+            List<BasketVM> basketVMs = new List<BasketVM>();
+
+            if (!string.IsNullOrWhiteSpace(basket))
+            {
+                basketVMs = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
+            }
+
+            if (User.Identity.IsAuthenticated)
+            {
+                AppUser appUser = await _userManager.Users.Include(u => u.Baskets.Where(b => b.IsDeleted == false))
+                        .FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
+
+                foreach (Basket basketItem in appUser.Baskets)
+                {
+                    if (!basketVMs.Exists(b => b.Id == basketItem.ProductId))
+                    {
+                        basketVMs.Add(new BasketVM { Id = (int)basketItem.ProductId, Count = basketItem.Count });
+                    }
+                }
+            }
+
+            foreach (BasketVM basketVM in basketVMs)
+            {
+                Product product = await _context.Products
+                    .FirstOrDefaultAsync(p => p.Id == basketVM.Id && p.IsDeleted == false);
+
+                if (product != null)
+                {
+                    basketVM.ExTax = product.ExTax;
+                    basketVM.Price = product.DiscountedPrice > 0 ? product.DiscountedPrice : product.Price;
+                    basketVM.Title = product.Title;
+                    basketVM.Image = product.Image;
+                }
+               
+            }
+
+
+            return View(basketVMs);
         }
+        public async Task<IActionResult> ChangeCount(int? id, int? count)
+        {
+            string basket = HttpContext.Request.Cookies["basket"];
+            List<BasketVM> basketVMs = new List<BasketVM>();
+
+            if (!string.IsNullOrWhiteSpace(basket))
+            {
+                basketVMs = JsonConvert.DeserializeObject<List<BasketVM>>(basket);
+            }
+
+            if (User.Identity.IsAuthenticated)
+            {
+                AppUser appUser = await _userManager.Users.Include(u => u.Baskets.Where(b => b.IsDeleted == false))
+                        .FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
+
+                foreach (Basket basketItem in appUser.Baskets)
+                {
+                    if (!basketVMs.Exists(b => b.Id == basketItem.ProductId))
+                    {
+                        basketVMs.Add(new BasketVM { Id = (int)basketItem.ProductId, Count = basketItem.Count });
+                    }
+                }
+            }
+
+            foreach (BasketVM basketVM in basketVMs)
+            {
+                Product product = await _context.Products
+                    .FirstOrDefaultAsync(p => p.Id == basketVM.Id && p.IsDeleted == false);
+
+                if (product != null)
+                {
+                    basketVM.ExTax = product.ExTax;
+                    basketVM.Price = product.DiscountedPrice > 0 ? product.DiscountedPrice : product.Price;
+                    basketVM.Title = product.Title;
+                    basketVM.Image = product.Image;
+                }
+                if (id != null && product.Id == id)
+                {
+                    basketVM.Count = (int)count;
+                    basket = JsonConvert.SerializeObject(basketVMs);
+
+                    HttpContext.Response.Cookies.Append("basket", basket);
+
+                    await _context.SaveChangesAsync();
+
+                }
+            }
+
+
+            return PartialView("_BasketViewPartial",basketVMs);
+        }
+
 
         public async Task<IActionResult> AddBasket(int? id)
         {

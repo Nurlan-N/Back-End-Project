@@ -22,7 +22,7 @@
                                     <a href="product-details.html">@basketVM.Title</a>
                                 </h3>
                                 <p>
-                                    <span class="cart-quantity">@basketVM.Count<strong>&times;</strong></span>
+                                    <span class="cart-quantity" >@basketVM.Count<strong>&times;</strong></span>
                                     <span class="cart-price">$@basketVM.Price</span>
                                 </p>
                             </div>
@@ -52,7 +52,7 @@
                 @if (Model != null && Model.Count() > 0)
                 {
                     <div class="minicart-button">
-                        <a href="cart.html"><i class="fa fa-shopping-cart"></i> view cart</a>
+                        <a asp-action="index" asp-controller="basket"><i class="fa fa-shopping-cart"></i> view cart</a>
                     <a asp-action="checkout" asp-controller="shop"><i class="fa fa-share"></i> checkout</a>
                     </div>
 

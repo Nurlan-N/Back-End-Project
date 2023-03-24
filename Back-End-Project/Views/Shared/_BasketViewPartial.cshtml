@@ -1,0 +1,44 @@
+﻿@model List<BasketVM>
+
+<div class="cart-table table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th class="pro-thumbnail">Thumbnail</th>
+                <th class="pro-title">Product</th>
+                <th class="pro-price">Price</th>
+                <th class="pro-quantity">Quantity</th>
+                <th class="pro-subtotal">Total</th>
+                <th class="pro-remove">Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (BasketVM basketVM in Model)
+                {
+                    <tr>
+                        <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/img/product/@basketVM.Image" alt="@basketVM.Title" /></a></td>
+                        <td class="pro-title"><a href="#">@basketVM.Title</a></td>
+                        <td class="pro-price"><span>@basketVM.Price.ToString("C")</span></td>
+                        <td class="pro-quantity">
+                            <div>
+                                <button class="plush" data-id="@basketVM.Id"><i class="fa-solid fa-plus"></i></button>
+                                <input style="width:30px; text-align:center; " class="prCount" type="number" value="@basketVM.Count">
+                                <button class="minush" data-id="@basketVM.Id"><i class="fa-solid fa-minus"></i></button>
+                            </div>
+                        </td>
+                        <td class="pro-subtotal"><span>@((basketVM.Price * basketVM.Count).ToString("C"))</span></td>
+                        <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6">Your shopping cart is empty.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

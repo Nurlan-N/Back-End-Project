@@ -1,4 +1,34 @@
 ﻿$(document).ready(function () {
+    $(document).on('click' ,'.plush' ,function () {
+        var countInput = $(this).siblings(".prCount");
+        var count = parseInt(countInput.val());
+        let productId = $(this).attr('data-id');
+        count++;
+        countInput.val(count);
+        console.log(count + " " + productId);
+        fetch('basket/ChangeCount?id=' + productId + '&count=' + count)
+            .then(res => {
+                return res.text()
+            }).then(data => {
+                $('.basketContainer').html(data)
+            })
+    });
+
+    $(document).on('click','.minush', function () {
+        var countInput = $(this).siblings(".prCount");
+        var count = parseInt(countInput.val());
+        let productId = $(this).attr('data-id');
+        if (count > 1) {
+            count--;
+            countInput.val(count);
+        }
+        fetch('basket/ChangeCount?id=' + productId + '&count=' + count)
+            .then(res => {
+                return res.text()
+            }).then(data => {
+                $('.basketContainer').html(data)
+            })
+    });
     $(document).on('click', '.deleteWishlist', function (e) {
         e.preventDefault();
 
@@ -44,7 +74,7 @@
                 $(this).val(ss);
             })
     })
-    
+
     $('.rangeFilter').click(function (e) {
         e.preventDefault();
 
@@ -58,7 +88,7 @@
                 $('.shopList').html(data)
             })
     })
-    
+
     $('.addToBasket').click(function myFunction(e) {
         e.preventDefault();
 
@@ -68,15 +98,15 @@
                 return res.text();
             }).then(data => {
                 $('.header-cart').html(data)
-                 
+
                 $(".offcanvas-close, .minicart-close,.offcanvas-overlay").on('click', function () {
                     $("body").removeClass('fix');
                     $(".offcanvas-search-inner, .minicart-inner").removeClass('show')
                 })
             })
-       
+
     })
-    $(document).on('click', '.deleteToBasket' , function(e) {
+    $(document).on('click', '.deleteToBasket', function (e) {
         e.preventDefault();
 
         const removeId = $(this).attr('data-id');
@@ -89,13 +119,12 @@
                 $(".minicart-inner").addClass('show')
                 $(".offcanvas-close, .minicart-close,.offcanvas-overlay").on('click', function () {
                     $("body").removeClass('fix');
-                   $(".offcanvas-search-inner, .minicart-inner").removeClass('show')
+                    $(".offcanvas-search-inner, .minicart-inner").removeClass('show')
                 })
             })
-       
+
     })
-    $('#SearchValue').keyup(function ()
-	{
+    $('#SearchValue').keyup(function () {
         let search = $(this).val();
         console.log(search)
         if (search.Trim().length >= 3) {
@@ -109,7 +138,7 @@
             $('.searchBody').html('')
 
         }
-	})
+    })
 
 
     $(".productModal").click(function (e) {
@@ -117,27 +146,26 @@
 
         let url = $(this).attr('href')
 
-        fetch(url).then(res =>
-        {
+        fetch(url).then(res => {
             return res.text();
         })
             .then(data => {
                 $('.modal-content').html(data)
-				// prodct details slider active
-				$('.product-large-slider').slick({
-					fade: true,
-					arrows: false,
-					asNavFor: '.pro-nav'
-				});
+                // prodct details slider active
+                $('.product-large-slider').slick({
+                    fade: true,
+                    arrows: false,
+                    asNavFor: '.pro-nav'
+                });
 
 
-				// product details slider nav active
-				$('.pro-nav').slick({
-					slidesToShow: 4,
-					asNavFor: '.product-large-slider',
-					arrows: false,
-					focusOnSelect: true
-				});
+                // product details slider nav active
+                $('.pro-nav').slick({
+                    slidesToShow: 4,
+                    asNavFor: '.product-large-slider',
+                    arrows: false,
+                    focusOnSelect: true
+                });
 
             })
     })
