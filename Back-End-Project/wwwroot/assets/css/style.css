@@ -33,6 +33,15 @@ body {
   line-height: 1.7;
   font-size: 16px;
   font-family: "Open Sans", sans-serif; }
+.table tr {
+    cursor: pointer;
+}
+
+.hiddenRow {
+    padding: 0 4px !important;
+    background-color: #eeeeee;
+    font-size: 13px;
+}
 
 a {
   -webkit-transition: 0.4s;

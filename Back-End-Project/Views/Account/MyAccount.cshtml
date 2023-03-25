@@ -70,7 +70,7 @@
                                     <div class="myaccount-content">
                                         <h3>Orders</h3>
                                         <div class="myaccount-table table-responsive text-center">
-                                            <table class="table table-bordered">
+                                            <table class="table table-condensed" style="border-collapse:collapse;">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>Order</th>
@@ -81,27 +81,50 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>Aug 22, 2018</td>
-                                                        <td>Pending</td>
-                                                        <td>$3000</td>
-                                                        <td><a href="cart.html" class="btn ">View</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>July 22, 2018</td>
-                                                        <td>Approved</td>
-                                                        <td>$200</td>
-                                                        <td><a href="cart.html" class="btn ">View</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>June 12, 2017</td>
-                                                        <td>On Hold</td>
-                                                        <td>$990</td>
-                                                        <td><a href="cart.html" class="btn ">View</a></td>
-                                                    </tr>
+                                                    @foreach (Order order in Model.Orders)
+                                                    {
+                                                        <tr data-toggle="collapse" data-target="#demo1" class="accordion-toggle">
+                                                            <td>@order.No</td>
+                                                            <td>@order.CreatedAt?.ToString("dd MMM yyyy")</td>
+                                                            <td>@order.Status</td>
+                                                            <td class="text-success">@(order.OrderItems.Sum(i => i.Price * i.Count).ToString("C"))</td>
+                                                            <td class="text-error">@order.Commet</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="6" class="hiddenRow">
+                                                                <div class="accordian-body collapse" id="demo1">
+                                                                    <table class="table table-condensed" style="border-collapse:collapse;">
+                                                                        <thead class="thead-light">
+                                                                            <tr>
+                                                                                <th>Image</th>
+                                                                                <th>Name</th>
+                                                                                <th>Price</th>
+                                                                                <th>Count</th>
+                                                                                <th>Total</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @foreach (OrderItem item in order.OrderItems)
+                                                                            {
+                                                                                <tr data-toggle="collapse" data-target="#demo2" class="accordion-toggle">
+                                                                                    <td><img width="50px" height="50px" src="~/assets//img//product/@item.Product.Image"/></td>
+                                                                                    <td>@item.Product.Title</td>
+                                                                                    <td>@((item.Product.DiscountedPrice > 0 ? item.Product.DiscountedPrice : item.Product.Price).ToString("C"))</td>
+                                                                                    <td>@item.Count</td>
+                                                                                    @if (item.Product.DiscountedPrice != null && item.Product.DiscountedPrice > 0)
+                                                                                    {
+                                                                                        <td class="text-success">@((item.Product.DiscountedPrice  * item.Count).ToString("C"))</td>
+                                                                                    }else{
+                                                                                        <td class="text-success">@((item.Product.Price * item.Count).ToString("C"))</td>
+                                                                                    }
+                                                                                </tr>
+                                                                            }
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    }
                                                 </tbody>
                                             </table>
                                         </div>

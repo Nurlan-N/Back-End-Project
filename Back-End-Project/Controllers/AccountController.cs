@@ -165,15 +165,21 @@ namespace Back_End_Project.Controllers
         [Authorize]
         public async Task<IActionResult> MyAccount()
         {
-            AppUser appUser = await _userManager.Users.Include(u => u.Addresses.Where(a => a.IsDeleted == false))
-                .FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
+            AppUser appUser = await _userManager.Users
+                .Include(u => u.Orders.Where(uo => !uo.IsDeleted))
+                .ThenInclude(uo => uo.OrderItems.Where(oi => !oi.IsDeleted))
+                .ThenInclude(oi => oi.Product)
+                .Include(u => u.Addresses.Where(a => a.IsDeleted == false))
+                .FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name
+                .ToUpperInvariant());
             ProfileVM profileVM = new()
             {
                 Name = appUser.Name,
                 SurName = appUser.SurName,
                 Email = appUser.Email,
                 UserName = appUser.UserName,
-                Addresses = appUser.Addresses
+                Addresses = appUser.Addresses,
+                Orders = appUser.Orders,
 
             };
             return View(profileVM);

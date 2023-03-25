@@ -1,4 +1,10 @@
 ﻿$(document).ready(function () {
+    $('.accordian-body').on('show.bs.collapse', function () {
+        $(this).closest("table")
+            .find(".collapse.in")
+            .not(this)
+            .collapse('toggle')
+    })
     $(document).on('click' ,'.plush' ,function () {
         var countInput = $(this).siblings(".prCount");
         var count = parseInt(countInput.val());
