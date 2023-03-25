@@ -1,0 +1,70 @@
+﻿@model Order
+
+
+<form id="orderCheckout" method="post">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="single-input-item">
+                <label asp-for="Name" for="f_name" class="required">First Name</label>
+                <input asp-for="Name" type="text" id="f_name" placeholder="First Name" required />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="single-input-item">
+                <label asp-for="SurName" for="l_name" class="required">Last Name</label>
+                <input asp-for="SurName" type="text" id="l_name" placeholder="Last Name" required />
+                <span asp-validation-for="SurName" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="single-input-item">
+        <label asp-for="Email" for="email" class="required">Email Address</label>
+        <input asp-for ="Email" type="email" id="email" placeholder="Email Address" required />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="single-input-item">
+        <label asp-for="Country" for="country" class="required">Country</label>
+        <select asp-for="Country" name="country nice-select" id="country">
+            <option value="Afghanistan">Afghanistan</option>
+            <option value="Albania">Albania</option>
+            <option value="Algeria">Algeria</option>
+            <option value="Azerbaijan">Azerbaijan</option>
+            <option value="Bangladesh">Bangladesh</option>
+            <option value="India">India</option>
+            <option value="Pakistan">Pakistan</option>
+            <option value="England">England</option>
+            <option value="London">London</option>
+            <option value="London">London</option>
+            <option value="Chaina">China</option>
+        </select>
+        <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+
+    <div class="single-input-item">
+        <label asp-for="State" for="street-address" class="required mt-20">Street address</label>
+        <input asp-for="State" type="text" id="street-address" placeholder="Street address Line 1" required />
+        <span asp-validation-for="State" class="text-danger"></span>
+    </div>
+
+    <div class="single-input-item">
+        <label asp-for="City" for="town" class="required">Town / City</label>
+        <input asp-for="City" type="text" id="town" placeholder="Town / City" required />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+
+    <div class="single-input-item">
+        <label asp-for="PostalCode" for="postcode" class="required">Postcode / ZIP</label>
+        <input asp-for="PostalCode" type="text" id="postcode" placeholder="Postcode / ZIP" required />
+        <span asp-validation-for="PostalCode" class="text-danger"></span>
+    </div>
+
+    <div class="single-input-item">
+        <label asp-for="Phone" for="phone">Phone</label>
+        <input asp-for="Phone" type="text" id="phone" placeholder="Phone" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+</form>

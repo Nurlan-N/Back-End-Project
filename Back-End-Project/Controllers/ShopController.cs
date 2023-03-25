@@ -98,8 +98,6 @@ namespace Back_End_Project.Controllers
         [Authorize]
         public async Task<IActionResult> AddReview(Review review)
         {
-
-
             Product product = await _context.Products
                 .Include(p => p.ProductImages.Where(pi => !pi.IsDeleted && pi.ProductId == review.ProductId))
                 .Include(p => p.Reviews.Where(r => !r.IsDeleted  ))

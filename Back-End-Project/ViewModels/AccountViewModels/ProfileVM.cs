@@ -26,5 +26,6 @@ namespace Back_End_Project.ViewModels.AccountViewModels
         [Compare("Password")]
         public string? ConfirimPassword { get; set; }
         public IEnumerable<Address>? Addresses { get; set; }
+        public Address Address { get; internal set; }
     }
 }

@@ -57,6 +57,8 @@
         $('.addressContainer').addClass('d-none');
         $('.addressForm').removeClass('d-none')
     })
+
+ 
     $(document).on('change', 'select[name=sortby]', function () {
         let categoryName = $('.categoryName').attr('href')
         let categoryId = $(this).attr('data-categoryId');
