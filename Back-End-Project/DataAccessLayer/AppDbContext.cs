@@ -20,5 +20,6 @@ namespace Back_End_Project.DataAccessLayer
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<Wishlist> Wishlist { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }
