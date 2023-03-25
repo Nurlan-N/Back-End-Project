@@ -97,21 +97,24 @@
             })
     })
 
-    $('.addToBasket').click(function myFunction(e) {
+    $(document).on('click', '.addToBasket',function myFunction(e) {
         e.preventDefault();
 
         let productId = $(this).data('id');
+        console.log(productId)
         fetch('basket/AddBasket?id=' + productId)
             .then(res => {
                 return res.text();
             }).then(data => {
                 $('.header-cart').html(data)
+                console.log("ok")
 
                 $(".offcanvas-close, .minicart-close,.offcanvas-overlay").on('click', function () {
                     $("body").removeClass('fix');
                     $(".offcanvas-search-inner, .minicart-inner").removeClass('show')
                 })
             })
+            .error(console.log("--"))
 
     })
     $(document).on('click', '.deleteToBasket', function (e) {

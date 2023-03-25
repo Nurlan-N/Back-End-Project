@@ -14,7 +14,6 @@ using RegisterVM = Back_End_Project.Areas.Manage.ViewModels.AccountVMs.RegisterV
 namespace Back_End_Project.Areas.Manage.Controllers
 {
     [Area("manage")]
-    [Authorize(Roles = "SuperAdmin")]
     public class UserController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
@@ -29,6 +28,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Index(int pageIndex = 1)
         {
             List<UserVM> query = await _userManager.Users.Where(u => u.UserName != User.Identity.Name)
@@ -55,12 +55,14 @@ namespace Back_End_Project.Areas.Manage.Controllers
             return View(PageNatedList<UserVM>.Create(query.AsQueryable(), pageIndex, 5));
         }
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Create( )
         {
             ViewBag.Role = await _roleManager.Roles.Where(c => c.Name != "SuperAdmin").ToListAsync();
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Create(RegisterVM registerVM)
         {
             if (!ModelState.IsValid) { return View(); }
@@ -88,6 +90,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> ChangeRole(string? id)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -112,6 +115,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
             return View(userChangeRoleVM);
         }
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> ChangeRole(UserChangeRoleVM userChangeRoleVM)
         {
             ViewBag.Role = await _roleManager.Roles.Where(c => c.Name != "SuperAdmin").ToListAsync();
@@ -133,6 +137,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Block(string? id)
         {
             AppUser user = await _userManager.FindByIdAsync(id);
@@ -140,6 +145,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
             return View(user);
         }
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Block(AppUser appUser )
         {
             if (!ModelState.IsValid) { return View(appUser); }
@@ -154,6 +160,7 @@ namespace Back_End_Project.Areas.Manage.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Unblock(string userId)
         {
             if (string.IsNullOrEmpty(userId)) { return NotFound(); }

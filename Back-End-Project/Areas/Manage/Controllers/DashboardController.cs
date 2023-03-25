@@ -5,7 +5,7 @@ using System.Data;
 namespace Back_End_Project.Areas.Manage.Controllers
 {
     [Area("manage")]
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class DashboardController : Controller
     {
         public IActionResult Index()

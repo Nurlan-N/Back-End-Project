@@ -34,7 +34,7 @@ namespace Back_End_Project.Controllers
             {
                 productList = productList.OrderByDescending(p => p.Title);
             }
-            else if (sort == 3) // Pahalıdan ucuza
+            else if (sort == 3) // Bahalıdan ucuza
             {
                 productList = productList.OrderByDescending(p => (p.DiscountedPrice > 0 ? p.DiscountedPrice : p.Price));
             }

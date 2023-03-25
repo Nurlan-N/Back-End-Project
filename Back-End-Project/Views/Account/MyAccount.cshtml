@@ -40,11 +40,6 @@
                                     Dashboard
                                 </a>
                                 <a class="@(TempData["Tab"]?.ToString() == "orders" ? "active" : "")" href="#orders" data-toggle="tab"><i class="fa fa-cart-arrow-down"></i> Orders</a>
-                                <a class="@(TempData["Tab"]?.ToString() == "download" ? "active" : "")" href="#download" data-toggle="tab"><i class="fa fa-cloud-download"></i> Download</a>
-                                <a class="@(TempData["Tab"]?.ToString() == "payment" ? "active" : "")" href="#payment-method" data-toggle="tab">
-                                    <i class="fa fa-credit-card"></i> Payment
-                                    Method
-                                </a>
                                 <a class="@(TempData["Tab"]?.ToString() == "address" ? "active" : "")" href="#address-edit" data-toggle="tab"><i class="fa fa-map-marker"></i> address</a>
                                 <a class="@(TempData["Tab"]?.ToString() == "account" ? "active" : "")" href="#account-info" data-toggle="tab"><i class="fa fa-user"></i> Account Details</a>
                                 <a asp-controller="account" asp-action="logout"><i class="fa fa-sign-out"></i> Logout</a>
