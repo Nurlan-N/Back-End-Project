@@ -28,5 +28,6 @@ namespace Back_End_Project.ViewModels.AccountViewModels
         public IEnumerable<Address>? Addresses { get; set; }
         public IEnumerable<Order>? Orders { get; set; }
         public Address Address { get; internal set; }
+        public Address? EditAddress { get; set; }
     }
 }

@@ -1,0 +1,41 @@
+﻿@model Address
+
+<h3>Edit Address</h3>
+<div>
+    <form method="post" asp-controller="account" asp-action="EditAddress">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="single-input-item col-lg-6">
+            <label asp-for="IsMain" class="required">IsMain</label>
+            <input asp-for="IsMain" style="width:auto" type="checkbox" />
+        </div>
+        <div class="col-lg-6">
+            <div class="single-input-item">
+                <label asp-for="Country" class="required">Country</label>
+                <input asp-for="Country" type="text" id="first-name" placeholder="Country" />
+            </div>
+        </div>
+        <div class="single-input-item col-lg-6">
+            <label asp-for="City" class="required">City</label>
+            <input asp-for="City" type="text" id="display-name" placeholder="City" />
+        </div>
+        <div class="col-lg-6">
+            <div class="single-input-item">
+                <label asp-for="State" class="required">State</label>
+                <input asp-for="State" type="text" id="last-name" placeholder="State" />
+            </div>
+        </div>
+
+        <div class="single-input-item col-lg-6">
+            <label asp-for="PostalCode" class="required">PostalCode</label>
+            <input asp-for="PostalCode" type="text" id="email" placeholder="PostalCode" />
+        </div>
+        <div class="single-input-item col-lg-6">
+            <label asp-for="Phone" class="required">Phone</label>
+            <input asp-for="Phone" type="number" id="email" placeholder="Phone" />
+        </div>
+
+        <div class="single-input-item">
+            <button type="submit" class="check-btn sqr-btn ">Save Changes</button>
+        </div>
+    </form>
+</div>

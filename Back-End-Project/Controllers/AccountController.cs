@@ -163,7 +163,7 @@ namespace Back_End_Project.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> MyAccount()
+        public async Task<IActionResult> MyAccount(Address? address)
         {
             AppUser appUser = await _userManager.Users
                 .Include(u => u.Orders.Where(uo => !uo.IsDeleted))
@@ -180,6 +180,7 @@ namespace Back_End_Project.Controllers
                 UserName = appUser.UserName,
                 Addresses = appUser.Addresses,
                 Orders = appUser.Orders,
+                EditAddress = address
 
             };
             return View(profileVM);
@@ -269,5 +270,83 @@ namespace Back_End_Project.Controllers
 
             return RedirectToAction(nameof(MyAccount));
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> EditAddress(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            AppUser appUser = await _userManager.Users.Include(u => u.Addresses.Where(a => a.IsDeleted == false))
+                 .FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
+
+            Address oldAddress = appUser.Addresses.FirstOrDefault(a => a.Id == id && !a.IsDeleted);
+            if (oldAddress == null)
+            {
+                return NotFound();
+            }
+
+            Address address = new Address
+            {
+                City = oldAddress.City,
+                Country = oldAddress.Country,
+                PostalCode = oldAddress.PostalCode,
+                Phone = oldAddress.Phone,
+                State = oldAddress.State,
+                IsMain = oldAddress.IsMain,
+                Id = oldAddress.Id
+            };
+
+            TempData["Tab"] = "address";
+
+            return RedirectToAction(nameof(MyAccount),address);
+        }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAddress(Address address)
+        {
+            if (address == null || address.Id == null){return NotFound();}
+
+            AppUser user = await _userManager.Users.Include(u => u.Addresses.Where(a => a.IsDeleted == false))
+                 .FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
+
+            if (user == null) {return NotFound();}
+
+            Address oldAddress = user.Addresses.FirstOrDefault(a => a.Id == address.Id && !a.IsDeleted);
+            if (oldAddress == null)
+            {
+                return NotFound();
+            }
+
+            bool isMain = address.IsMain;
+            if (isMain)
+            {
+                IEnumerable<Address> otherAddresses = user.Addresses.Where(a => a.Id != address.Id && !a.IsDeleted && a.IsMain);
+                foreach (Address otherAddress in otherAddresses)
+                {
+                    otherAddress.IsMain = false;
+                }
+            }
+
+            oldAddress.City = address.City;
+            oldAddress.Country = address.Country;
+            oldAddress.PostalCode = address.PostalCode;
+            oldAddress.Phone = address.Phone;
+            oldAddress.State = address.State;
+            oldAddress.IsMain = isMain;
+
+            await _userManager.UpdateAsync(user);
+            await _context.SaveChangesAsync();
+
+
+            TempData["Tab"] = "address";
+            TempData["Message"] = "Address updated successfully";
+
+            return RedirectToAction(nameof(MyAccount));
+        }
+
     }
 }

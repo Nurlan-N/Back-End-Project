@@ -169,30 +169,37 @@
                                 <!-- Single Tab Content End -->
                                 <!-- Single Tab Content Start -->
                                 <div class="tab-pane fade @(TempData["Tab"]?.ToString() == "address" ? "show active" : "")" id="address-edit" role="tabpanel">
-                                    <div class="addressForm d-none">
-                                        @await Html.PartialAsync("_AddressFormPartial",new Address())
-                                    </div>
-                                    <div class="myaccount-content addressContainer">
-                                        <a href="#" class="check-btn sqr-btn addAddress"><i class="fa fa-edit"></i> Add Address</a>
-                                        @if (Model.Addresses != null && Model.Addresses.Count() > 0)
-                                        {
-                                            foreach (Address address in Model.Addresses)
+                                    @if (Model.EditAddress.Id == null || Model.EditAddress.Id == 0)
+                                    {
+                                        <div class="addressForm d-none">
+                                            @await Html.PartialAsync("_AddressFormPartial",new Address())
+                                        </div>
+                                        <div class="myaccount-content addressContainer">
+                                            <a href="#" class="check-btn sqr-btn addAddress"><i class="fa fa-edit"></i> Add Address</a>
+                                            @if (Model.Addresses != null && Model.Addresses.Count() > 0)
                                             {
-                                                <h3>@address.Country </h3>
-                                                <address>
-                                                    <p><strong>@($"{Model.Name} {Model.SurName}")</strong></p>
-                                                    <p>
-                                                        @address.City, @address.State <br>
-                                                       , @address.PostalCode
-                                                    </p>
-                                                    <p>Mobile: @address.Phone</p>
-                                                    <p>IsMain:<span class="text @(address.IsMain ? "text-success" : "text-danger")"> @address.IsMain</span></p>
-                                                </address>
-                                                <a asp-action="editAddress" asp-controller="account" asp-route-id="@address.Id" class="check-btn sqr-btn "><i class="fa fa-edit"></i> Edit Address</a>
+                                                foreach (Address address in Model.Addresses)
+                                                {
+                                                    <h3>@address.Country </h3>
+                                                    <address>
+                                                        <p><strong>@($"{Model.Name} {Model.SurName}")</strong></p>
+                                                        <p>
+                                                            @address.City, @address.State <br>
+                                                            , @address.PostalCode
+                                                        </p>
+                                                        <p>Mobile: @address.Phone</p>
+                                                        <p>IsMain:<span class="text @(address.IsMain ? "text-success" : "text-danger")"> @address.IsMain</span></p>
+                                                    </address>
+                                                    <a asp-action="EditAddress" asp-controller="account" asp-route-id="@address.Id" class="check-btn sqr-btn "><i class="fa fa-edit"></i> Edit Address</a>
+                                                }
                                             }
-                                        }
 
-                                    </div>                              <!-- Single Tab Content Start -->
+                                        </div>
+                                    }else{
+                                        <div class="addressForm ">
+                                            @await Html.PartialAsync("_EditAddressPartial", Model.EditAddress)
+                                        </div>
+                                    }                             <!-- Single Tab Content Start -->
                                 </div>
                                 <!-- Single Tab Content End -->
                                 <!-- Single Tab Content Start -->

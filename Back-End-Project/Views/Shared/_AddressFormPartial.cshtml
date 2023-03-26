@@ -3,9 +3,9 @@
 <h3>Add Address</h3>
 <div>
     <form method="post" asp-controller="account" asp-action="AddAddress">
-            <div class="single-input-item">
+        <div class="single-input-item col-lg-6">
                 <label asp-for="IsMain" class="required">IsMain</label>
-                <input asp-for="IsMain" type="checkbox" />
+            <input asp-for="IsMain" style="width:auto" type="checkbox" />
             </div>
             <div class="col-lg-6">
                 <div class="single-input-item">
@@ -13,7 +13,7 @@
                     <input asp-for="Country" type="text" id="first-name" placeholder="Country" />
                 </div>
             </div>
-            <div class="single-input-item">
+        <div class="single-input-item col-lg-6">
                 <label asp-for="City" class="required">City</label>
                 <input asp-for="City" type="text" id="display-name" placeholder="City" />
             </div>
@@ -24,11 +24,11 @@
                 </div>
             </div>
         
-        <div class="single-input-item">
+        <div class="single-input-item col-lg-6">
             <label asp-for="PostalCode" class="required">PostalCode</label>
             <input asp-for="PostalCode" type="text" id="email" placeholder="PostalCode" />
         </div>
-        <div class="single-input-item">
+        <div class="single-input-item col-lg-6">
             <label asp-for="Phone" class="required">Phone</label>
             <input asp-for="Phone" type="number" id="email" placeholder="Phone" />
         </div>
