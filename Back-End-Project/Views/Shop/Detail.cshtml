@@ -36,8 +36,15 @@
                                 <div class="pro-large-img img-zoom">
                                     <img src="~/assets/img/product/@Model.Product.Image" alt="" />
                                 </div>
+                                @foreach (ProductImage image in Model.Product.ProductImages)
+                                {
+                                    <div class="pro-large-img img-zoom">
+                                        <img src="~/assets/img/product/@image.Image" alt="" />
+                                    </div>
+                                }
                             </div>
                             <div class="pro-nav slick-row-5">
+                                <div class="pro-nav-thumb"><img src="~/assets/img/product/@Model.Product.Image" alt="" /></div>
                                 @foreach (ProductImage image in Model.Product.ProductImages)
                                 {
                                     <div class="pro-nav-thumb"><img src="~/assets/img/product/@image.Image" alt="" /></div>

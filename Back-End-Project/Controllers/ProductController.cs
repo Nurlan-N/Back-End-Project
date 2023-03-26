@@ -20,7 +20,8 @@ namespace Back_End_Project.Controllers
         }
         public async Task<IActionResult> ProductModal(int? id)
         {
-            Product product = await _context.Products .FirstOrDefaultAsync(p => p.IsDeleted == false && p.Id == id );
+            Product product = await _context.Products.Include(p => p.ProductImages.Where(pi => !pi.IsDeleted))
+                .FirstOrDefaultAsync(p => !p.IsDeleted && p.Id == id );
              
             return PartialView("_ModalPartial",product);
         }

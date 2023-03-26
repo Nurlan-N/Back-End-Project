@@ -24,7 +24,7 @@ namespace Back_End_Project.Controllers
         public async Task<IActionResult> Index(int? categoryId, int sort, int pageIndex = 1)
         {
 
-            IQueryable<Product> productList = _context.Products.Where(p => p.IsDeleted == false); //  Productlar
+            IQueryable<Product> productList = _context.Products.Where(p => !p.IsDeleted ); //  Productlar
 
             if (sort == 1) // A-Z
             {

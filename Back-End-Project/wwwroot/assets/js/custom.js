@@ -114,7 +114,7 @@
                     $(".offcanvas-search-inner, .minicart-inner").removeClass('show')
                 })
             })
-            .error(console.log("--"))
+            
 
     })
     $(document).on('click', '.deleteToBasket', function (e) {
