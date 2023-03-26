@@ -15,5 +15,6 @@ namespace Back_End_Project.Models
         public string Description { get; set; }
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
+        public IEnumerable<Comment>? Comments { get; set; }
     }
 }

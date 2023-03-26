@@ -1,4 +1,4 @@
-﻿@model Blog
+﻿@model BlogReviewVM
 
 @{
     ViewData["Title"] = "Detail";
@@ -86,109 +86,57 @@
                         <!-- blog single item start -->
                         <div class="blog-post-item">
                             <div class="blog-thumb">
-                                <img src="~/assets/img/blog/@Model.Image" alt="blog thumb">
+                                <img src="~/assets/img/blog/@Model.Blog.Image" alt="blog thumb">
                             </div>
                             <div class="blog-content blog-details">
                                 <h5 class="blog-title">
-                                    @Model.Title.Substring(0,25)
+                                    @Model.Blog.Title.Substring(0,25)
                                 </h5>
                                 <ul class="blog-meta">
-                                    <li><span>By: </span>@Model.CreatedBy,</li>
-                                    <li><span>On: </span>@Model.CreatedAt</li>
+                                    <li><span>By: </span>@Model.Blog.CreatedBy,</li>
+                                    <li><span>On: </span>@Model.Blog.CreatedAt</li>
                                 </ul>
                                 <p>
-                                    @Html.Raw(Model.Description)
+                                    @Html.Raw(Model.Blog.Description)
                                 </p>
                             </div>
                         </div>
                         <!-- blog single item start -->
                         <!-- comment area start -->
                         <div class="comment-section section-padding">
-                            <h5>03 Comment</h5>
+                            <h5> Comment</h5>
                             <ul>
-                                <li>
-                                    <div class="author-avatar">
-                                        <img src="~/assets/img/blog/comment-icon.png" alt="">
-                                    </div>
-                                    <div class="comment-body">
-                                        <span class="reply-btn"><a href="#">Reply</a></span>
-                                        <h5 class="comment-author">Admin</h5>
-                                        <div class="comment-post-date">
-                                            15 Dec, 2019 at 9:30pm
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
-                                            adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?
-                                        </p>
-                                    </div>
-                                </li>
-                                <li class="comment-children">
-                                    <div class="author-avatar">
-                                        <img src="~/assets/img/blog/comment-icon.png" alt="">
-                                    </div>
-                                    <div class="comment-body">
-                                        <span class="reply-btn"><a href="#">Reply</a></span>
-                                        <h5 class="comment-author">Admin</h5>
-                                        <div class="comment-post-date">
-                                            20 Nov, 2019 at 9:30pm
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
-                                            adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?
-                                        </p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="author-avatar">
-                                        <img src="~/assets/img/blog/comment-icon.png" alt="">
-                                    </div>
-                                    <div class="comment-body">
-                                        <span class="reply-btn"><a href="#">Reply</a></span>
-                                        <h5 class="comment-author">Admin</h5>
-                                        <div class="comment-post-date">
-                                            25 Jan, 2019 at 9:30pm
-                                        </div>
-                                        <p>
-                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
-                                            adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?
-                                        </p>
-                                    </div>
-                                </li>
+                                @if (Model.Blog != null && Model.Blog.Comments != null)
+                                {
+                                    @foreach (Comment comment in Model.Blog.Comments)
+                                    {
+                                        <li>
+                                            <div class="author-avatar">
+                                                <img src="~/assets/img/blog/comment-icon.png" alt="">
+                                            </div>
+                                            <div class="comment-body">
+                                                <span class="reply-btn"><a href="#">Reply</a></span>
+                                                <h5 class="comment-author">@comment.Name</h5>
+                                                <div class="comment-post-date">
+                                                    @comment.CreatedAt?.ToString("dd MMM yyyy")
+                                                </div>
+                                                <p>
+                                                    @comment.Description
+                                                </p>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+
                             </ul>
                         </div>
                         <!-- comment area end -->
                         <!-- start blog comment box -->
-                        <div class="blog-comment-wrapper">
-                            <h5>Leave A Reply</h5>
-                            <p>Email address will not be published. Required fields are marked *</p>
-                            <form action="#">
-                                <div class="comment-post-box">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <label>Comment</label>
-                                            <textarea name="commnet" placeholder="Write a comment"></textarea>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4">
-                                            <label>Name</label>
-                                            <input type="text" class="coment-field" placeholder="Name">
-                                        </div>
-                                        <div class="col-lg-4 col-md-4">
-                                            <label>Email</label>
-                                            <input type="text" class="coment-field" placeholder="Email">
-                                        </div>
-                                        <div class="col-lg-4 col-md-4">
-                                            <label>Website</label>
-                                            <input type="text" class="coment-field" placeholder="Website">
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="coment-btn">
-                                                <input class="btn" type="submit" name="submit" value="POST COMMENT">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @await Html.PartialAsync("_AddCommentPartial",Model.Comment)
+                        }
+                        
                         <!-- start blog comment box -->
                     </div>
                 </div>

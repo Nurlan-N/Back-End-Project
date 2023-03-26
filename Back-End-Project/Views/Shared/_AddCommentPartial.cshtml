@@ -1,0 +1,32 @@
+﻿@model Comment
+
+
+
+<div class="blog-comment-wrapper">
+    <h5>Leave A Reply</h5>
+    <p>Email address will not be published. Required fields are marked *</p>
+    <form method="post" asp-action="AddComment" asp-controller="Blog">
+        <input type="hidden" name="BlogId" value="@Model.BlogId" />
+        <div class="comment-post-box">
+            <div class="row">
+                <div class="col-12">
+                    <label asp-for="Description">Comment</label>
+                    <textarea asp-for="Description" placeholder="Write a comment"></textarea>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <label asp-for="Name">Name</label>
+                    <input asp-for="Name" type="text" class="coment-field" placeholder="Name">
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <label asp-for="Email" >Email</label>
+                    <input asp-for=Email type="text" class="coment-field" placeholder="Email">
+                </div>
+                <div class="col-12">
+                    <div class="coment-btn">
+                        <input class="btn" type="submit" name="submit" value="POST COMMENT">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
